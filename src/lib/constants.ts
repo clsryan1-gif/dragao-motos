@@ -3,7 +3,7 @@ export const CONTACT_INFO = {
   cep: "58000-000",
   phone: "(83) 9472-30230",
   whatsapp: "https://wa.me/5511947230230",
-  instagram: "https://instagram.com/dragaomotos",
+  instagram: "https://www.instagram.com/dragao_motos?__pwa=1",
   opening_hours: {
     week: "08:00 - 18:30",
     saturday: "08:00 - 13:00",
