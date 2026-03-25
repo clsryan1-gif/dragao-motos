@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+@theme {
+  /* Cores - Backgrounds & Superfícies */
+  --color-preto-profundo: var(--background);
+  --color-preto-asfalto: #0F0F0F;
+  --color-grafite: var(--grafite);
+  --color-grafite-claro: #2A2A2A;
+
+  /* Cores - Accents (O Fogo do Dragão) */
+  --color-neon-verde: var(--neon-verde);
+  --color-neon-escuro: var(--neon-escuro);
+
+  /* Tipografia */
+  --font-display: var(--font-teko);
+  --font-sans: var(--font-inter);
+
+  /* Sombras e Glow Neon */
+  --shadow-neon: 0 0 15px rgba(0, 255, 0, 0.4);
+  --shadow-neon-hover: 0 0 25px rgba(0, 255, 0, 0.8);
+
+  /* Animações Customizadas */
+  --animate-fade-in: fadeIn 0.5s ease-out forwards;
+  --animate-slide-up: slideUp 0.5s ease-out forwards;
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+:root {
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --neon-verde: #00FF00;
+  --neon-escuro: #003300;
+  --grafite: #121214;
+  scroll-behavior: smooth;
+  /* Suporte para Safe Area (iPhone Notch) */
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
+  --safe-area-inset-right: env(safe-area-inset-right);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow-x: hidden;
+  padding-top: var(--safe-area-inset-top);
+  padding-bottom: var(--safe-area-inset-bottom);
+  padding-left: var(--safe-area-inset-left);
+  padding-right: var(--safe-area-inset-right);
+}
+
+/* Efeito de Textura de Asfalto/Ruído Animado */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 50;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  animation: noise 0.2s infinite steps(2);
+}
+
+@keyframes noise {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-1%, -1%); }
+  20% { transform: translate(1%, 1%); }
+  30% { transform: translate(-2%, 1%); }
+  40% { transform: translate(2%, -1%); }
+  50% { transform: translate(-1%, 2%); }
+  60% { transform: translate(1%, -2%); }
+  70% { transform: translate(2%, 2%); }
+  80% { transform: translate(-2%, -2%); }
+  90% { transform: translate(1%, -1%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Dragon Tracks - Marcas de garras de dragão espalhadas */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.03)' stroke-width='1.5' stroke-linecap='round'%3E%3Cpath d='M40 60 Q 60 100 45 150 M70 50 Q 90 90 75 140 M100 70 Q 120 110 105 160'/%3E%3Cpath d='M240 260 Q 260 300 245 350 M270 250 Q 290 290 275 340 M300 270 Q 320 310 305 360' transform='rotate(15 270 300)'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+/* Street Flow - Faixas de luz de velocidade sutil no fundo */
+.street-flow {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent, rgba(0, 255, 0, 0.01) 50%, transparent);
+  pointer-events: none;
+  z-index: -1;
+  animation: streetflow 12s linear infinite;
+}
+
+@keyframes streetflow {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+/* Utilitário para Glow Neon Brabo */
+.glow-neon {
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.border-neon {
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+}
+
+/* Custom Scrollbar estilo Oficina */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-preto-profundo);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-grafite);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neon-verde);
+  box-shadow: 0 0 10px var(--color-neon-verde);
+}
+
+/* --- Ajustes de UX para PWA --- */
+
+/* Prevenir o "pull-to-refresh" e o scroll elástico lateral em dispositivos móveis */
+html, body {
+  overscroll-behavior-y: contain;
+  overscroll-behavior-x: none;
+}
+
+/* Estilos específicos para quando o app é aberto em modo Standalone (instalado) */
+@media (display-mode: standalone) {
+  /* Esconder a scrollbar para um look mais limpo de app */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Evitar a seleção de texto acidental em elementos que se comportam como botões */
+  nav, button, a {
+    -webkit-user-select: none;
+    user-select: none; /* Previne seleção acidental como em apps */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Transição de entrada de página ULTRA-RÁPIDA (Estilo Impacto) ── */
+  @keyframes pageEnter {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.99);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .page-enter {
+    animation: pageEnter 0.2s cubic-bezier(0.2, 0, 0, 1) both;
+    transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+}
+
+/* Otimização de toque em dispositivos móveis */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+}
+
+/* Esconder Indicadores de Desenvovolvimento (Botão "N", Static Indicator, etc.) */
+#shadow-root-container, 
+[data-nextjs-toast], 
+[data-nextjs-dialog],
+[data-nextjs-toast-wrapper],
+#nextjs-portal,
+.nextjs-toast-errors-parent,
+.__next-static-indicator-stack,
+[data-nextjs-static-indicator],
+[data-nextjs-build-indicator],
+[data-nextjs-loading-indicator],
+#static-indicator,
+#nextjs-dev-overlay,
+[class^="NextJS_"],
+[id^="nextjs"],
+[class*="DevOverlay"],
+[class*="BuildIndicator"],
+[class*="LoadingIndicator"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  z-index: -9999 !important;
+  position: absolute;
+  left: -9999px;
+}
