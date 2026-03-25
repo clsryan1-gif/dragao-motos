@@ -19,18 +19,19 @@ export function SOSSection() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
             </span>
-            <span className="font-display tracking-[0.15em] text-red-500 uppercase text-[10px] md:text-sm font-bold">SOS Oficina 24h</span>
+            <span className="font-display tracking-[0.15em] text-red-500 uppercase text-[10px] md:text-sm font-black">‼️ RESGATE 24H: NÓS VAMOS ATÉ VOCÊ ‼️</span>
           </div>
-          <h2 className="font-display text-2xl md:text-8xl font-bold text-white mb-4 md:mb-6 uppercase italic tracking-tighter">
-            Parou na <span className="text-red-500">Estrada?</span>
+          <h2 className="font-display text-2xl md:text-8xl font-black text-white mb-4 md:mb-6 uppercase italic tracking-tighter leading-[0.9]">
+            MOTO PARADA? <br />
+            <span className="text-red-500">NÃO SE DESESPERE!</span>
           </h2>
-          <p className="font-sans text-white/60 text-lg max-w-xl mb-8">
-            Não importa a hora ou o lugar. Se a sua moto te deixou na mão, a Dragão Motos vai até você. Resgate especializado e mecânica de emergência.
+          <p className="font-sans text-white/80 text-lg md:text-xl max-w-xl mb-8 font-bold italic leading-tight">
+            Sabemos o quanto é ruim ficar na mão. Não importa o lugar ou o perigo, a Dragão Motos vai te buscar e cuidar da sua parceira como se fosse nossa. <span className="text-red-500">Nós te tiramos dessa! 🆘🤝</span>
           </p>
           <div className="flex flex-wrap gap-4">
-            <a href={`${CONTACT_INFO.whatsapp}?text=SOS%20DRAGÃO!%20Minha%20moto%20parou%20e%20preciso%20de%20ajuda%20urgente.`} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-red-600 hover:bg-red-700 text-white shadow-[0_0_20px_rgba(220,38,38,0.4)] border-none">
-                <Phone className="mr-2 w-5 h-5" /> Chamar Resgate Agora
+            <a href={`${CONTACT_INFO.whatsapp}?text=%F0%9F%86%98%20AJUDA%20URGENTE!%20Minha%20moto%20me%20deixou%20na%20m%C3%A3o%20e%20preciso%20do%20Resgate%20do%20Drag%C3%A3o%20agora!%20%E2%80%BC%EF%B8%8F`} target="_blank" rel="noopener noreferrer">
+              <Button className="bg-red-600 hover:bg-red-500 text-white shadow-[0_0_30px_rgba(220,38,38,0.5)] border-none py-8 px-10 text-xl font-black rounded-2xl animate-pulse">
+                🚨 CHAMAR SOCORRO IMEDIATO
               </Button>
             </a>
           </div>
