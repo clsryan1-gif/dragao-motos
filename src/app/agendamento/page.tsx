@@ -7,7 +7,6 @@ import { FadeIn } from '@/components/ui/FadeIn';
 import { Button } from '@/components/ui/Button';
 import { Calendar, Clock, User, MessageSquare, Motorbike, ChevronRight, CheckCircle2, Zap, Settings, ShieldCheck, Sparkles } from 'lucide-react';
 import Link from 'next/link';
-import { StickySOS } from '@/components/ui/StickySOS';
 import { CONTACT_INFO, SERVICES_DATA } from '@/lib/constants';
 import { getWhatsAppLink } from '@/lib/contact';
 
@@ -76,7 +75,6 @@ export default function AgendamentoPage() {
     return (
       <main className="min-h-screen bg-preto-profundo text-white">
         <Navbar />
-        <StickySOS />
         <div className="pt-24 pb-12 md:pt-32 md:pb-20 px-6 flex flex-col items-center justify-center text-center">
           <FadeIn>
             <div className="w-16 h-16 md:w-20 md:h-20 bg-neon-verde/20 rounded-full flex items-center justify-center mb-6 md:mb-8 border border-neon-verde shadow-neon">
@@ -101,7 +99,6 @@ export default function AgendamentoPage() {
   return (
     <main className="min-h-screen bg-preto-profundo text-white">
       <Navbar />
-      <StickySOS />
       
       <div className="pt-24 pb-12 md:pt-32 md:pb-20 px-6">
         <div className="max-w-4xl mx-auto">
