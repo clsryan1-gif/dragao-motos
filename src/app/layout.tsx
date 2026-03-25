@@ -27,7 +27,6 @@ export const metadata: Metadata = {
   description: "Elite em manutenção e customização de motos de alta cilindrada.",
   keywords: ["mecânica", "moto", "performance", "customização", "oficina"],
   manifest: "/manifest.json",
-  themeColor: "#09090b", // Adicionado explicitamente para garantir o Chrome PWA
   icons: {
     icon: "/icon-pwa-192.png?v=7",
     shortcut: "/icon-pwa-192.png?v=7",

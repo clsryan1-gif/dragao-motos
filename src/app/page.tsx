@@ -2,12 +2,11 @@ import React from 'react';
 import Image from 'next/image';
 import { Navbar } from '@/components/layout/Navbar';
 import { Hero } from '@/components/sections/Hero';
-import { TransformationGallery } from '@/components/sections/TransformationGallery';
+import { Fan2025Showcase } from '@/components/sections/Fan2025Showcase';
 import { TechnicalFAQ } from '@/components/sections/TechnicalFAQ';
 import { SOSSection } from '@/components/sections/SOSSection';
 import { Diferenciais } from '@/components/sections/Diferenciais';
 import { CTAFinal } from '@/components/sections/CTAFinal';
-import { StickySOS } from '@/components/ui/StickySOS';
 import { Footer } from '@/components/layout/Footer';
 
 export default function Home() {
@@ -39,12 +38,11 @@ export default function Home() {
       </div>
       <div className="street-flow" />
       <Navbar />
-      <StickySOS />
       
       <div className="flex-grow">
         <Hero />
         <Diferenciais />
-        <TransformationGallery />
+        <Fan2025Showcase />
         <TechnicalFAQ />
         <SOSSection />
         <CTAFinal />
