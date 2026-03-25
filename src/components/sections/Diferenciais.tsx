@@ -36,7 +36,7 @@ export function Diferenciais() {
     <section id="diferenciais" className="py-6 md:py-24 px-6 md:px-12 bg-preto-asfalto">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
         {diferenciais.map((item, index) => (
-          <div key={index} className="p-6 md:p-8 bg-grafite border border-grafite-claro rounded-sm hover:border-neon-verde/30 transition-colors group">
+          <div key={index} className="p-8 bg-aco-grad border-chrome hover:border-neon-verde transition-all duration-500 hover:-translate-y-2 relative overflow-hidden flex flex-col items-center text-center">
             <div className="text-neon-verde mb-4 group-hover:scale-110 transition-transform">
               {item.icon}
             </div>
