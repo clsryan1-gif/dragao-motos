@@ -1,4 +1,4 @@
-const CACHE_NAME = 'impacto-moto-v2';
+const CACHE_NAME = 'dragao-pwa-v8';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
