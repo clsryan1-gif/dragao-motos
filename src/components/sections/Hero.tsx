@@ -48,10 +48,10 @@ export function Hero() {
         </div>
 
         <div className="animate-slide-up [animation-delay:300ms]">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 px-4 w-full max-w-2xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 px-4 w-full max-w-3xl mx-auto">
             <Link href="/agendamento" className="w-full sm:flex-1">
-              <Button variant="neon" size="lg" className="w-full active:scale-95 transition-transform uppercase font-black tracking-widest text-[12px] md:text-sm py-8 shadow-[0_0_20px_rgba(0,255,0,0.2)]">
-                AGENDAR SERVIÇO
+              <Button variant="neon" size="lg" className="w-full">
+                Agendar Serviço
               </Button>
             </Link>
             <a 
@@ -60,7 +60,7 @@ export function Hero() {
               rel="noopener noreferrer" 
               className="w-full sm:flex-1"
             >
-              <Button className="w-full bg-red-600 hover:bg-red-500 text-white font-black py-8 active:scale-95 transition-transform uppercase tracking-widest text-[12px] md:text-sm shadow-[0_0_30px_rgba(220,38,38,0.4)] animate-pulse border-none rounded-xl">
+              <Button variant="sos" size="lg" className="w-full">
                 🚨 SOS RESGATE 🚨
               </Button>
             </a>

@@ -222,7 +222,7 @@ export default function AgendamentoPage() {
                 disabled={!selectedService || !formData.nome || !formData.whatsapp || !formData.moto}
                 variant="neon" 
                 size="lg" 
-                className="w-full py-4 md:py-6 group text-base md:text-xl"
+                className="w-full group"
                 aria-label="Confirmar Agendamento e abrir WhatsApp"
               >
                 Confirmar Agendamento via WhatsApp

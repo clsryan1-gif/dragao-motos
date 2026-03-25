@@ -30,7 +30,7 @@ export function SOSSection() {
           </p>
           <div className="flex flex-wrap gap-4">
             <a href={`${CONTACT_INFO.whatsapp}?text=%F0%9F%86%98%20AJUDA%20URGENTE!%20Minha%20moto%20me%20deixou%20na%20m%C3%A3o%20e%20preciso%20do%20Resgate%20do%20Drag%C3%A3o%20agora!%20%E2%80%BC%EF%B8%8F`} target="_blank" rel="noopener noreferrer">
-              <Button className="bg-red-600 hover:bg-red-500 text-white shadow-[0_0_30px_rgba(220,38,38,0.5)] border-none py-8 px-10 text-xl font-black rounded-2xl animate-pulse">
+              <Button variant="sos" size="lg" className="w-full">
                 🚨 CHAMAR SOCORRO IMEDIATO
               </Button>
             </a>

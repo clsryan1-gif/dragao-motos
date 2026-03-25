@@ -18,10 +18,11 @@ export function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: 'Início', href: '/#hero' },
-    { name: 'Galeria', href: '/#galeria' },
-    { name: 'FAQ', href: '/#faq' },
-    { name: 'Agendamento', href: '/agendamento' },
+    { name: 'Início', href: '/' },
+    { name: 'Serviços', href: '/servicos' },
+    { name: 'Galeria', href: '/galeria' },
+    { name: 'FAQ', href: '/faq' },
+    { name: 'SOS', href: '/sos' },
   ];
 
   return (

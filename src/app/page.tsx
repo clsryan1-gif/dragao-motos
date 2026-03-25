@@ -2,11 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import { Navbar } from '@/components/layout/Navbar';
 import { Hero } from '@/components/sections/Hero';
-import { Fan2025Showcase } from '@/components/sections/Fan2025Showcase';
-import { TechnicalFAQ } from '@/components/sections/TechnicalFAQ';
-import { SOSSection } from '@/components/sections/SOSSection';
-import { Diferenciais } from '@/components/sections/Diferenciais';
-import { CTAFinal } from '@/components/sections/CTAFinal';
+import { HomeAddress } from '@/components/sections/HomeAddress';
+import { BottomNav } from '@/components/layout/BottomNav';
 import { Footer } from '@/components/layout/Footer';
 
 export default function Home() {
@@ -25,31 +22,17 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="fixed top-20 right-[-10%] z-0 pointer-events-none opacity-[0.05]">
-        <div className="relative w-[200px] h-[200px] md:w-[400px] md:h-[400px]">
-          <Image 
-            src="/images/logo/logo3.png" 
-            alt="" 
-            fill
-            className="grayscale rotate-12 object-contain"
-            sizes="(max-width: 768px) 200px, 400px"
-          />
-        </div>
-      </div>
+      
       <div className="street-flow" />
       <Navbar />
       
       <div className="flex-grow">
         <Hero />
-        <Diferenciais />
-        <Fan2025Showcase />
-        <TechnicalFAQ />
-        <SOSSection />
-        <CTAFinal />
+        <HomeAddress />
       </div>
 
       <Footer />
+      <BottomNav />
     </main>
   );
 }
-

@@ -8,9 +8,9 @@ import { cn } from '@/lib/utils';
 
 const navItems = [
   { name: 'Início', href: '/', icon: Home },
-  { name: 'Galeria', href: '/#galeria', icon: Bike },
+  { name: 'Galeria', href: '/galeria', icon: Bike },
   { name: 'Agendar', href: '/agendamento', icon: Calendar },
-  { name: 'SOS', href: '/#sos', icon: MessageSquare, color: 'text-neon-verde' },
+  { name: 'SOS', href: '/sos', icon: MessageSquare, color: 'text-neon-verde' },
 ];
 
 export function BottomNav() {
