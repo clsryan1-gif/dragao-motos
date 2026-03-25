@@ -184,34 +184,6 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 15px var(--color-neon-verde);
 }
 
-.glow-neon {
-  text-shadow: 0 0 15px rgba(0, 255, 51, 0.6);
-}
-
-.border-neon {
-  box-shadow: 0 0 20px rgba(0, 255, 51, 0.2);
-  border: 1px solid rgba(0, 255, 51, 0.3);
-}
-
-/* Custom Scrollbar estilo Oficina Metálica */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0a0a0c;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #27272a;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-neon-verde);
-  box-shadow: 0 0 15px var(--color-neon-verde);
-}
-
 /* --- Ajustes de UX para PWA --- */
 
 /* Prevenir o "pull-to-refresh" e o scroll elástico lateral em dispositivos móveis */

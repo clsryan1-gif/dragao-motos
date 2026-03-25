@@ -22,7 +22,7 @@ export function SOSSection() {
       `*MOTO:* ${sosData.modelo}%0A` +
       `*O QUE HOUVE:* ${sosData.problema}%0A%0A` +
       `Estou parado e preciso de resgate urgente! 🏁🆘`;
-    return `https://wa.me/5583947230230?text=${text}`;
+    return `https://wa.me/558387426823?text=${text}`;
   };
 
   return (
