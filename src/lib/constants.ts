@@ -2,7 +2,7 @@ export const CONTACT_INFO = {
   address: "Rua José Gomes dos Santos, 95, Tibiri - João Pessoa",
   cep: "58000-000",
   phone: "(83) 9472-30230",
-  whatsapp: "https://wa.me/5511947230230",
+  whatsapp: "https://wa.me/5583947230230",
   instagram: "https://www.instagram.com/dragao_motos?__pwa=1",
   opening_hours: {
     week: "08:00 - 18:30",
