@@ -8,12 +8,14 @@ import { useToast } from '@/context/ToastContext';
 import { supabase, supabaseUrl, supabaseKey } from '@/lib/supabase';
 import { motion, Reorder } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { DiagnosticOverlay } from '@/components/ui/DiagnosticOverlay';
 
 export default function GalleryManager({ initialImages }: { initialImages: any[] }) {
   const { showToast } = useToast();
   const [images, setImages] = useState(initialImages);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || !e.target.files[0]) return;
@@ -49,7 +51,9 @@ export default function GalleryManager({ initialImages }: { initialImages: any[]
       showToast('IMAGEM INCORPORADA COM SUCESSO!', 'success');
       window.location.reload(); // Refresh to get the new order
     } catch (err: any) {
-      showToast(err.message || 'FALHA NO UPLOAD', 'error');
+      const msg = err.message || 'FALHA DE COMUNICAÇÃO NO UPLOAD';
+      showToast(msg, 'error');
+      setErrorMsg(msg);
     } finally {
       setUploading(false);
     }
@@ -81,6 +85,11 @@ export default function GalleryManager({ initialImages }: { initialImages: any[]
 
   return (
     <div className="space-y-8">
+      {/* Diagnóstico de Erro Tático */}
+      {errorMsg && (
+        <DiagnosticOverlay error={errorMsg} onClose={() => setErrorMsg(null)} />
+      )}
+
       {/* Upload Section */}
       <div className="bg-aco-grad border-chrome p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-32 h-32 bg-neon-verde/5 blur-3xl"></div>
