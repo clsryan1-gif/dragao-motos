@@ -5,7 +5,7 @@ import { jwtVerify } from 'jose';
 const secretKey = process.env.JWT_SECRET || "dragao_motos_super_secret_key_2026";
 const key = new TextEncoder().encode(secretKey);
 
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const sessionToken = request.cookies.get("dragao_session")?.value;
 
   // Protect /admin routes
