@@ -10,7 +10,27 @@ import ProdutoCard from '@/components/catalog/ProdutoCard';
 import { ProductSkeleton, CategorySkeleton } from '@/components/catalog/ProductSkeleton';
 import { Toast } from '@/components/ui/Toast';
 
-// ... (tipagem e variants permanecem iguais)
+// ===================================================
+// Tipagem e Helpers
+type Produto = {
+  id: string;
+  categoria: string;
+  nome: string;
+  compatibilidade: string;
+  preco: number;
+  imagem: string | null;
+  estoque: number;
+};
+
+const BRL = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.05 }
+  }
+};
 
 export default function ProdutosPage() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
@@ -21,7 +41,36 @@ export default function ProdutosPage() {
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState('');
 
-  // ... (useEffect permanece igual)
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch('/api/produtos');
+        if (res.ok) {
+          const data = await res.json();
+          setProdutos(data);
+        }
+      } catch (e) {
+        console.error("Erro ao carregar catálogo:", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  const categorias = useMemo(
+    () => ['Todas', ...Array.from(new Set(produtos.map(p => p.categoria)))],
+    [produtos]
+  );
+
+  const filtrados = useMemo(() => {
+    const q = busca.toLowerCase();
+    return produtos.filter(p => {
+      const bateCategoria = categoria === 'Todas' || p.categoria === categoria;
+      const bateBusca = p.nome.toLowerCase().includes(q) || p.compatibilidade.toLowerCase().includes(q);
+      return bateCategoria && bateBusca;
+    });
+  }, [busca, categoria, produtos]);
 
   const onAdicionar = useCallback((p: Produto) => {
     setAddedItem(p.id);
