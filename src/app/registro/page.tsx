@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { User, Lock, ChevronLeft, ShieldCheck, UserPlus, Trophy, Star, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Toast } from '@/components/ui/Toast';
+import { StatusToast as Toast } from '@/components/ui/Toast';
 import { maskPhone } from '@/lib/mask';
 
 export default function RegistroPage() {
