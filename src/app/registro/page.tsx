@@ -48,18 +48,49 @@ export default function RegistroPage() {
       return;
     }
 
-    // Simulação de processamento
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // PERSISTÊNCIA REAL COM LOCALSTORAGE
+    try {
+      const existingUsers = JSON.parse(localStorage.getItem('dragao_pilotos') || '[]');
+      
+      // Sanitização: Remover conta 'teste' se existir (como pedido pelo Ryan)
+      const sanitizedUsers = existingUsers.filter((u: any) => u.identificador.toLowerCase() !== 'teste');
 
-    setToastMsg('CONTA CRIADA! PILOTO AUTORIZADO. SEU CUPOM DE 10% OFF FOI ATIVADO NO CATÁLOGO!');
-    setToastType('success');
-    setShowToast(true);
-    setIsSubmitting(false);
+      const userExists = sanitizedUsers.some((u: any) => u.identificador.toLowerCase() === formData.identificador.toLowerCase());
 
-    // Redirecionamento após 2 segundos
-    setTimeout(() => {
-      router.push('/login');
-    }, 2000);
+      if (userExists) {
+        setToastMsg('ERRO: ESTE PILOTO JÁ ESTÁ CADASTRADO NO QG!');
+        setToastType('error');
+        setShowToast(true);
+        setIsSubmitting(false);
+        return;
+      }
+
+      const newUser = {
+        nome: formData.nome,
+        identificador: formData.identificador,
+        senha: formData.senha
+      };
+
+      localStorage.setItem('dragao_pilotos', JSON.stringify([...sanitizedUsers, newUser]));
+
+      // Simulação de processamento visual
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      setToastMsg('CONTA CRIADA! PILOTO AUTORIZADO. SEU CUPOM DE 10% OFF FOI ATIVADO NO CATÁLOGO!');
+      setToastType('success');
+      setShowToast(true);
+      setIsSubmitting(false);
+
+      // Redirecionamento após 2 segundos
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
+    } catch (error) {
+      setToastMsg('ERRO CRÍTICO NO SISTEMA DE ARQUIVOS DO QG.');
+      setToastType('error');
+      setShowToast(true);
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -126,12 +157,36 @@ export default function RegistroPage() {
                 </motion.div>
               ))}
            </div>
+
+           {/* RETORNAR AO LOGIN (LATERAL) */}
+           <motion.div
+             initial={{ x: -30, opacity: 0 }}
+             animate={{ x: 0, opacity: 1 }}
+             transition={{ delay: 0.8 }}
+             className="mt-8 p-6 bg-aco-grad border-chrome/30 rounded-2xl relative overflow-hidden group hover:border-neon-verde/30 transition-all shadow-xl"
+           >
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-white/30 text-[8px] font-black uppercase tracking-widest mb-1">JÁ POSSUI ACESSO AO QG?</p>
+                  <h3 className="text-xl font-display font-black uppercase italic text-white leading-none group-hover:text-neon-verde transition-colors">EFETUAR LOGIN</h3>
+                </div>
+                <Link 
+                  href="/login" 
+                  className="w-12 h-12 rounded-xl bg-neon-verde/10 border border-neon-verde/20 flex items-center justify-center text-neon-verde group-hover:bg-neon-verde group-hover:text-black transition-all shadow-neon"
+                >
+                  <ChevronLeft size={24} />
+                </Link>
+              </div>
+              
+              <div className="absolute bottom-0 right-0 p-1 opacity-5">
+                 <ShieldCheck size={40} />
+              </div>
+           </motion.div>
         </div>
 
         {/* LADO DIREITO: FORMULÁRIO */}
         <div className="lg:col-span-7">
            <div className="bg-aco-grad border-chrome p-6 md:p-8 rounded-[2rem] relative overflow-hidden group shadow-2xl">
-              {/* Scanline effect */}
               <div className="absolute top-0 left-0 w-full h-[2px] bg-neon-verde/20 animate-[scan_6s_linear_infinite] pointer-events-none"></div>
 
               <div className="mb-6 flex items-center justify-between">
@@ -239,9 +294,6 @@ export default function RegistroPage() {
               </form>
 
               <div className="mt-10 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
-                <Link href="/login" className="text-white/40 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2">
-                  <ChevronLeft size={14} /> Já tem acesso? Efetuar Login
-                </Link>
                 <div className="flex gap-4">
                    <div className="w-10 h-1 md:w-16 bg-white/5 rounded-full relative overflow-hidden">
                       <div className="absolute inset-0 bg-neon-verde w-1/3 animate-pulse"></div>
