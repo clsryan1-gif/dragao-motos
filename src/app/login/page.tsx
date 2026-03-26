@@ -4,9 +4,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { User, Lock, ChevronRight, Zap, ShieldCheck, Sparkles } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Toast } from '@/components/ui/Toast';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showToast, setShowToast] = React.useState(false);
   const [toastMsg, setToastMsg] = React.useState('');
   const [toastType, setToastType] = React.useState<'success' | 'error'>('success');
@@ -35,7 +37,11 @@ export default function LoginPage() {
       setToastType('success');
       setShowToast(true);
       setIsSubmitting(false);
-      // Aqui redirecionaria para o dashboard
+      
+      // Redirecionamento para o Dashboard de Elite
+      setTimeout(() => {
+        router.push('/admin');
+      }, 1500);
       return;
     }
 
@@ -54,7 +60,11 @@ export default function LoginPage() {
         setToastType('success');
         setShowToast(true);
         setIsSubmitting(false);
-        // Redirecionamento simulação
+        
+        // Redirecionamento para a Home/Operações
+        setTimeout(() => {
+          router.push('/');
+        }, 1500);
         return;
       }
 
