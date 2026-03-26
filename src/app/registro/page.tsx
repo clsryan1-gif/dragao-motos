@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { User, Mail, Lock, ChevronLeft, ShieldCheck, UserPlus, Gift, Trophy, Star, Bell } from 'lucide-react';
+import { User, Lock, ChevronLeft, ShieldCheck, UserPlus, Trophy, Star, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Toast } from '@/components/ui/Toast';
+import { maskPhone } from '@/lib/mask';
 
 export default function RegistroPage() {
   const router = useRouter();
@@ -23,7 +24,11 @@ export default function RegistroPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    if (name === 'identificador') {
+      setFormData(prev => ({ ...prev, [name]: maskPhone(value) }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleRegistro = async (e: React.FormEvent) => {
@@ -62,7 +67,7 @@ export default function RegistroPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nome: formData.nome,
-          identificador: formData.identificador,
+          identificador: telefoneLimpo,
           senha: formData.senha
         })
       });
@@ -86,7 +91,7 @@ export default function RegistroPage() {
       setTimeout(() => {
         router.push('/login');
       }, 2000);
-    } catch (error) {
+    } catch (_) {
       setToastMsg('ERRO CRÍTICO NO SISTEMA DO QG. VERIFIQUE SUA CONEXÃO.');
       setToastType('error');
       setShowToast(true);

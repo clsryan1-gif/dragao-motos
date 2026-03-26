@@ -6,6 +6,7 @@ import { User, Lock, ChevronRight, Zap, ShieldCheck, Sparkles } from 'lucide-rea
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Toast } from '@/components/ui/Toast';
+import { maskPhone, cleanPhone } from '@/lib/mask';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,7 +22,14 @@ export default function LoginPage() {
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    const isRyan = value.toLowerCase() === 'ryan';
+    if (name === 'identificador' && value.toLowerCase() !== 'ryan') {
+      // Se começar com número ou for um formato de telefone, aplica máscara
+      if (/^\d/.test(value) || value.includes('(')) {
+        value = maskPhone(value);
+      }
+    }
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -29,29 +37,17 @@ export default function LoginPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const loginId = formData.identificador.toLowerCase();
-
-    // BYPASS ESPECIAL PARA O CHEFE (RYAN)
-    if (loginId === 'ryan' && formData.senha === '1120') {
-      setToastMsg('ACESSO ADMIN AUTORIZADO! BEM-VINDO, RYAN.');
-      setToastType('success');
-      setShowToast(true);
-      setIsSubmitting(false);
-      
-      // Redirecionamento para o Dashboard de Elite
-      setTimeout(() => {
-        router.push('/admin');
-      }, 1500);
-      return;
-    }
-
     // LOGIN REAL COM SUPABASE (API)
     try {
+      const loginId = formData.identificador.toLowerCase() === 'ryan' 
+        ? 'ryan' 
+        : cleanPhone(formData.identificador);
+
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          identificador: formData.identificador,
+          identificador: loginId,
           senha: formData.senha
         })
       });
@@ -76,7 +72,7 @@ export default function LoginPage() {
         setShowToast(true);
         setIsSubmitting(false);
       }
-    } catch (error) {
+    } catch (_) {
       setToastMsg('SISTEMA DE IDENTIFICAÇÃO OFFLINE. TENTE NOVAMENTE.');
       setToastType('error');
       setShowToast(true);

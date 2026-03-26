@@ -7,7 +7,12 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const { status } = await request.json();
+    const body = await request.json();
+    const status = body?.status;
+
+    if (typeof status !== 'string' || !status) {
+      return NextResponse.json({ message: "Status inválido" }, { status: 400 });
+    }
 
     const updated = await prisma.order.update({
       where: { id },

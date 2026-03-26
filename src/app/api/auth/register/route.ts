@@ -2,9 +2,15 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { createSession } from "@/lib/session";
+import { isRateLimited } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || "unknown";
+    if (isRateLimited(`register_${ip}`, 5, 60 * 1000)) { // 5 accounts per minute
+      return NextResponse.json({ message: "MUITAS TENTATIVAS. SISTEMA BLOQUEADO TEMPORARIAMENTE." }, { status: 429 });
+    }
+
     const { nome, identificador, senha } = await req.json();
 
     if (!nome || !identificador || !senha) {

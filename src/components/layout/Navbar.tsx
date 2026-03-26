@@ -5,8 +5,11 @@ import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
+import { LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export function Navbar() {
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [user, setUser] = React.useState<{ name: string; role: string } | null>(null);
 
@@ -21,7 +24,7 @@ export function Navbar() {
   React.useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch('/api/auth/me');
+        const res = await fetch(`/api/auth/me?t=${Date.now()}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           if (data.authenticated && data.user) {
@@ -34,6 +37,19 @@ export function Navbar() {
     };
     fetchUser();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch('/api/auth/logout', { method: 'POST' });
+      if (res.ok) {
+        setUser(null);
+        router.push('/login');
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Erro ao deslogar:", error);
+    }
+  };
 
   const navLinks = [
     { name: 'Início', href: '/' },
@@ -76,13 +92,23 @@ export function Navbar() {
 
         <div className="hidden md:flex items-center gap-4">
             {user ? (
-              <Link href={user.role === 'ADMIN' ? '/admin' : '/perfil'} className="text-sm font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors mr-4 group">
-                {user.role === 'ADMIN' ? (
-                  <span className="text-neon-verde group-hover:glow-neon">QG ADMIN</span>
-                ) : (
-                  <span>{user.name.split(' ')[0]}</span>
-                )}
-              </Link>
+              <div className="flex items-center">
+                <Link href={user.role === 'ADMIN' ? '/admin' : '/perfil'} className="text-sm font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors mr-4 group">
+                  {user.role === 'ADMIN' ? (
+                    <span className="text-neon-verde group-hover:glow-neon">QG ADMIN</span>
+                  ) : (
+                    <span>{user.name.split(' ')[0]}</span>
+                  )}
+                </Link>
+                <button 
+                  onClick={handleLogout}
+                  className="p-2 text-white/40 hover:text-red-500 transition-colors group relative"
+                  title="Sair do QG"
+                >
+                  <LogOut size={18} />
+                  <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black/80 px-2 py-1 rounded text-[8px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/10">SAIR DO QG</span>
+                </button>
+              </div>
             ) : (
               <Link href="/login" className="text-sm font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors mr-4">
                 Entrar
@@ -98,13 +124,18 @@ export function Navbar() {
         {/* No mobile, o BottomNav substitui o menu hambúrguer */}
         <div className="md:hidden flex items-center gap-4">
             {user ? (
-              <Link href={user.role === 'ADMIN' ? '/admin' : '/perfil'} className="text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white transition-colors group">
-                {user.role === 'ADMIN' ? (
-                  <span className="text-neon-verde group-hover:glow-neon">ADMIN</span>
-                ) : (
-                  <span>{user.name.split(' ')[0]}</span>
-                )}
-              </Link>
+              <div className="flex items-center gap-3">
+                <Link href={user.role === 'ADMIN' ? '/admin' : '/perfil'} className="text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white transition-colors group">
+                  {user.role === 'ADMIN' ? (
+                    <span className="text-neon-verde group-hover:glow-neon">ADMIN</span>
+                  ) : (
+                    <span>{user.name.split(' ')[0]}</span>
+                  )}
+                </Link>
+                <button onClick={handleLogout} className="text-white/40 hover:text-red-500 transition-colors">
+                  <LogOut size={16} />
+                </button>
+              </div>
             ) : (
               <Link href="/login" className="text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white transition-colors">
                 Entrar

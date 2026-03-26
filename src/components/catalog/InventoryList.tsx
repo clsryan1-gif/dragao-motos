@@ -67,14 +67,17 @@ export default function InventoryList({ produtos: initialProdutos }: { produtos:
   };
 
   const deleteProduto = async (id: string) => {
+    if (!window.confirm("Você tem certeza que quer deletar esta peça definitivamente?")) return;
     setLoading(true);
     try {
-      // API call placeholder
+      const res = await fetch(`/api/admin/produtos/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Falha ao deletar');
+      
       setProdutos(prev => prev.filter(p => p.id !== id));
-      showToast('Item removido do sistema.', 'success');
+      showToast('Item removido do banco central.', 'success');
       setDeletingId(null);
     } catch (err: any) {
-      showToast('Erro ao deletar registro.', 'error');
+      showToast('Erro ao deletar registro no banco.', 'error');
     } finally {
       setLoading(false);
     }
@@ -83,10 +86,17 @@ export default function InventoryList({ produtos: initialProdutos }: { produtos:
   const toggleAtivo = async (id: string, currentStatus: boolean) => {
     setLoading(true);
     try {
+      const res = await fetch(`/api/admin/produtos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ativo: !currentStatus }),
+      });
+      if (!res.ok) throw new Error('Falha ao alterar status');
+
       setProdutos(prev => prev.map(p => p.id === id ? { ...p, ativo: !currentStatus } : p));
       showToast(currentStatus ? 'Peça ocultada do radar.' : 'Peça visível no catálogo.', 'info');
     } catch (err: any) {
-      showToast('Erro ao alterar visibilidade.', 'error');
+      showToast('Erro de sincronia ao alterar visibilidade.', 'error');
     } finally {
       setLoading(false);
     }
@@ -213,7 +223,7 @@ export default function InventoryList({ produtos: initialProdutos }: { produtos:
                    <div className="flex gap-2 pl-6 border-l border-white/5">
                       <ActionBtn onClick={() => toggleAtivo(p.id, p.ativo)} icon={p.ativo ? Eye : EyeOff} active={p.ativo} />
                       <ActionBtn onClick={() => startEdit(p)} icon={Pencil} />
-                      <ActionBtn onClick={() => setDeletingId(p.id)} icon={Trash2} danger />
+                      <ActionBtn onClick={() => deleteProduto(p.id)} icon={Trash2} danger />
                    </div>
                 </motion.div>
               ))

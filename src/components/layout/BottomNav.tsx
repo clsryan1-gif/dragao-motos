@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Home, Bike, Calendar, MessageSquare, Package } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { Home, Bike, Calendar, MessageSquare, Package, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -16,6 +16,35 @@ const navItems = [
 
 export function BottomNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          setIsAuthenticated(data.authenticated);
+        }
+      } catch (error) {
+        setIsAuthenticated(false);
+      }
+    };
+    checkAuth();
+  }, [pathname]);
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch('/api/auth/logout', { method: 'POST' });
+      if (res.ok) {
+        router.push('/login');
+        router.refresh();
+      }
+    } catch (_) {
+      console.error("Erro ao deslogar:");
+    }
+  };
 
   return (
     <nav 
@@ -48,6 +77,20 @@ export function BottomNav() {
             </Link>
           );
         })}
+
+        {isAuthenticated && (
+          <button 
+            onClick={handleLogout}
+            className="flex flex-col items-center justify-center gap-1 w-full h-full group active:scale-95 transition-transform"
+          >
+            <div className="p-1 rounded-lg text-white/40 group-hover:text-red-500 transition-all duration-300">
+              <LogOut size={24} strokeWidth={2} />
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 group-hover:text-red-500 transition-colors">
+              Sair
+            </span>
+          </button>
+        )}
       </div>
     </nav>
   );

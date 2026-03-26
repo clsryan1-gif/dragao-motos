@@ -7,6 +7,14 @@ import { cn } from "@/lib/utils";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = React.useState(true);
+  const pathname = require('next/navigation').usePathname();
+  const router = require('next/navigation').useRouter();
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/');
+  };
 
   return (
     <div className="min-h-screen bg-preto-profundo text-white flex flex-col md:flex-row relative">
@@ -17,10 +25,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         isOpen ? "w-full md:w-72" : "w-20"
       )}>
         <div className="flex flex-col gap-8 h-full">
-            <Link href="/" className="flex items-center gap-2 text-neon-verde hover:glow-neon transition-all">
+            <button onClick={handleLogout} className="flex items-center gap-2 text-neon-verde hover:glow-neon transition-all">
                 <ChevronLeft size={16} />
                 <span className={cn("text-[10px] font-black uppercase tracking-widest", !isOpen && "hidden")}>Sair do QG</span>
-            </Link>
+            </button>
 
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-3">
@@ -35,9 +43,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
 
             <nav className="flex flex-col gap-4 mt-8">
-               <NavLink href="/admin" icon={LayoutDashboard} label="Resumo Tático" active isOpen={isOpen} />
-               <NavLink href="/admin/produtos" icon={Package} label="Estoque de Peças" isOpen={isOpen} />
-               <NavLink href="/admin/pedidos" icon={ShoppingCart} label="Vendas Live" isOpen={isOpen} />
+               <NavLink href="/admin" icon={LayoutDashboard} label="Resumo Tático" active={pathname === '/admin'} isOpen={isOpen} />
+               <NavLink href="/admin/produtos" icon={Package} label="Estoque de Peças" active={pathname.startsWith('/admin/produtos')} isOpen={isOpen} />
+               <NavLink href="/admin/pedidos" icon={ShoppingCart} label="Vendas Live" active={pathname.startsWith('/admin/pedidos')} isOpen={isOpen} />
             </nav>
 
             <div className="mt-auto pt-8 border-t border-white/5">

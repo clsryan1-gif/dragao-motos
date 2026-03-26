@@ -2,9 +2,15 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { createSession } from "@/lib/session";
+import { isRateLimited } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || "unknown";
+    if (isRateLimited(`login_${ip}`, 10, 60 * 1000)) { // 10 requests per minute
+      return NextResponse.json({ message: "MUITAS TENTATIVAS. SISTEMA BLOQUEADO TEMPORARIAMENTE." }, { status: 429 });
+    }
+
     const { identificador, senha } = await req.json();
 
     if (!identificador || !senha) {
@@ -16,8 +22,10 @@ export async function POST(req: Request) {
 
     const loginId = identificador.toLowerCase();
 
-    // BYPASS ESPECIAL PARA O CHEFE (RYAN) - Admin Backdoor
-    if (loginId === 'ryan' && senha === '1120') {
+    // BYPASS PARA ADMIN (Fallback '1120' se não tiver ENV)
+    const adminPassword = process.env.ADMIN_PASSWORD || '1120';
+    
+    if (loginId === 'ryan' && senha === adminPassword) {
       const adminUser = { id: "admin-ryan-001", name: "RYAN", email: "ryan@dragao.com", role: "ADMIN" };
       await createSession(adminUser);
       return NextResponse.json({

@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 
 import { BottomNav } from "@/components/layout/BottomNav";
 import { ToastProvider } from "@/context/ToastContext";
-import RegisterSW from "@/components/pwa/RegisterSW";
+import UnregisterSW from "@/components/pwa/UnregisterSW";
 import PWAInstall from "@/components/pwa/PWAInstall";
 import Script from "next/script";
 
@@ -60,7 +60,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-preto-profundo text-white font-sans pb-[env(safe-area-inset-bottom,4.5rem)] pt-[env(safe-area-inset-top,0px)] md:pb-0 overflow-x-hidden">
         <ToastProvider>
-          <RegisterSW />
+          <UnregisterSW />
           <PWAInstall />
           <Script id="hide-nextjs-dev-pill" strategy="afterInteractive">
             {`
