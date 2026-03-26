@@ -35,8 +35,9 @@ export default function NovoProdutoPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Verificação de Integridade das Keys
-    const isSupabaseConfigured = !supabaseUrl.includes('placeholder') && !supabaseKey.includes('placeholder');
+    const isSupabaseConfigured = !supabaseUrl.includes('placeholder') && 
+                                !supabaseKey.includes('placeholder') && 
+                                !supabaseKey.includes('COLE_O');
 
     if (file && !isSupabaseConfigured) {
       showToast('ERRO: CONFIGURE AS CHAVES NO ARQUIVO .ENV PARA UPLOAD!', 'error');
