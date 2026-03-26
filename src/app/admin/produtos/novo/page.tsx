@@ -6,7 +6,7 @@ import { ChevronLeft, Save, Zap, Package, Image as ImageIcon, Cpu, Database } fr
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useToast } from '@/context/ToastContext';
-import { supabase } from '@/lib/supabase';
+import { supabase, supabaseUrl, supabaseKey } from '@/lib/supabase';
 
 export default function NovoProdutoPage() {
   const router = useRouter();
