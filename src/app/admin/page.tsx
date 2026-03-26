@@ -8,9 +8,9 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboard() {
   // Coleta de dados com tratamento de erro resiliente
-  let usersCount = 0, productsCount = 0, ordersCount = 0, lowStock: any[] = [], recentOrders: any[] = [];
-  let entradasAgg: any = { _sum: { valor: 0 } };
-  let saidasAgg: any = { _sum: { valor: 0 } };
+  let usersCount = 0, productsCount = 0, ordersCount = 0, lowStock: { id: string, nome: string, estoque: number }[] = [], recentOrders: { id: string, total: number, status: string, user: { name: string } | null }[] = [];
+  let entradasAgg = { _sum: { valor: 0 as number | null } };
+  let saidasAgg = { _sum: { valor: 0 as number | null } };
 
   try {
     const [uCount, pCount, oCount, lStock, rOrders, entAgg, saiAgg] = await Promise.all([
@@ -192,7 +192,7 @@ export default async function AdminDashboard() {
   );
 }
 
-function MetricCard({ label, value, icon: Icon, color }: any) {
+function MetricCard({ label, value, icon: Icon, color }: { label: string, value: string, icon: any, color: 'neon' | 'white' }) {
   return (
     <div className="bg-aco-grad border-chrome rounded-3xl p-6 relative overflow-hidden group shadow-xl hover:translate-y-[-5px] transition-all">
       <div className={cn(

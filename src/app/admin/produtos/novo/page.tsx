@@ -103,14 +103,14 @@ export default function NovoProdutoPage() {
         <div className="md:col-span-2 space-y-6 bg-aco-grad border border-white/5 p-8 rounded-[2.5rem] shadow-2xl">
            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
-                 <Input label="IDENTIFICAÇÃO DA PEÇA" placeholder="Ex: Filtro de Óleo K&N Performance" value={formData.nome} onChange={v => setFormData({...formData, nome: v})} required />
+                 <Input label="IDENTIFICAÇÃO DA PEÇA" placeholder="Ex: Filtro de Óleo K&N Performance" value={formData.nome} onChange={(v: string) => setFormData({...formData, nome: v})} required />
               </div>
-              <Input label="SISTEMA / CATEGORIA" placeholder="Ex: Motor" value={formData.categoria} onChange={v => setFormData({...formData, categoria: v})} required />
-              <Input label="COMPATIBILIDADE TÉCNICA" placeholder="Ex: CB 650R / CBR 650F" value={formData.compatibilidade} onChange={v => setFormData({...formData, compatibilidade: v})} required />
-              <Input label="VALOR DE MERCADO (R$)" placeholder="0.00" type="number" step="0.01" value={formData.preco} onChange={v => setFormData({...formData, preco: v})} required />
-              <Input label="ESTOQUE INICIAL (UN)" placeholder="10" type="number" value={formData.estoque} onChange={v => setFormData({...formData, estoque: v})} required />
+              <Input label="SISTEMA / CATEGORIA" placeholder="Ex: Motor" value={formData.categoria} onChange={(v: string) => setFormData({...formData, categoria: v})} required />
+              <Input label="COMPATIBILIDADE TÉCNICA" placeholder="Ex: CB 650R / CBR 650F" value={formData.compatibilidade} onChange={(v: string) => setFormData({...formData, compatibilidade: v})} required />
+              <Input label="VALOR DE MERCADO (R$)" placeholder="0.00" type="number" step="0.01" value={formData.preco} onChange={(v: string) => setFormData({...formData, preco: v})} required />
+              <Input label="ESTOQUE INICIAL (UN)" placeholder="10" type="number" value={formData.estoque} onChange={(v: string) => setFormData({...formData, estoque: v})} required />
               <div className="md:col-span-2">
-                 <Input label="LINK DA IMAGEM (CDN/URL)" placeholder="https://exemplo.com/imagem.png" value={formData.imagem} onChange={v => setFormData({...formData, imagem: v})} />
+                 <Input label="LINK DA IMAGEM (CDN/URL)" placeholder="https://exemplo.com/imagem.png" value={formData.imagem} onChange={(v: string) => setFormData({...formData, imagem: v})} />
               </div>
            </div>
 
@@ -131,13 +131,13 @@ export default function NovoProdutoPage() {
   );
 }
 
-function Input({ label, ...props }: any) {
+function Input({ label, onChange, ...props }: any) {
   return (
     <div className="space-y-2">
        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-1 font-mono">{label}</label>
        <input 
          {...props}
-         onChange={e => props.onChange(e.target.value)}
+         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
          className="w-full bg-black/60 border border-white/10 rounded-xl px-5 py-4 text-sm font-bold text-white focus:outline-none focus:border-neon-verde transition-all placeholder:text-white/5"
        />
     </div>

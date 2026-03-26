@@ -120,12 +120,12 @@ export default function InventoryList({ produtos: initialProdutos }: { produtos:
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  <div className="md:col-span-2">
-                    <Field label="Nome do Equipamento" value={editData.nome} onChange={v => setEditData({...editData, nome: v})} />
+                    <Field label="Nome do Equipamento" value={editData.nome} onChange={(v: string) => setEditData({...editData, nome: v})} />
                  </div>
-                 <Field label="Categoria" value={editData.categoria} onChange={v => setEditData({...editData, categoria: v})} />
-                 <Field label="Compatibilidade" value={editData.compatibilidade} onChange={v => setEditData({...editData, compatibilidade: v})} />
-                 <Field label="Preço (R$)" value={editData.preco} type="number" onChange={v => setEditData({...editData, preco: parseFloat(v)})} />
-                 <Field label="Estoque (Un)" value={editData.estoque} type="number" onChange={v => setEditData({...editData, estoque: parseInt(v)})} />
+                 <Field label="Categoria" value={editData.categoria} onChange={(v: string) => setEditData({...editData, categoria: v})} />
+                 <Field label="Compatibilidade" value={editData.compatibilidade} onChange={(v: string) => setEditData({...editData, compatibilidade: v})} />
+                 <Field label="Preço (R$)" value={editData.preco} type="number" onChange={(v: string) => setEditData({...editData, preco: parseFloat(v)})} />
+                 <Field label="Estoque (Un)" value={editData.estoque} type="number" onChange={(v: string) => setEditData({...editData, estoque: parseInt(v)})} />
               </div>
 
               <div className="flex gap-4 mt-10">
@@ -238,7 +238,7 @@ function Field({ label, value, onChange, type = "text" }: { label: string, value
   );
 }
 
-function ActionBtn({ icon: Icon, onClick, active, danger, alert }: any) {
+function ActionBtn({ icon: Icon, onClick, active, danger }: { icon: any, onClick: () => void, active?: boolean, danger?: boolean }) {
   return (
     <button 
       onClick={onClick}
