@@ -18,9 +18,16 @@ export function SOSSection() {
   };
 
   const generateWALink = () => {
-    const text = `🆘 SOS RESGATE DRAGÃO!%0A%0A` +
-      `*MOTO:* ${sosData.modelo}%0A` +
-      `*O QUE HOUVE:* ${sosData.problema}%0A%0A` +
+    const modelo = sosData.modelo.trim();
+    const problema = sosData.problema.trim();
+    
+    const text = `🆘 *SOS RESGATE DRAGÃO!* 🆘%0A%0A` +
+      `*MOTO:* ${modelo}%0A` +
+      `*O QUE HOUVE:* ${problema}%0A%0A` +
+      `----------------------------%0A` +
+      `📢 *AVISO IMPORTANTE:*%0A` +
+      `⏱️ *Tempo de Espera:* A combinar (depende da distância)%0A` +
+      `📍 *Taxa de Deslocamento:* A ser informada na triagem%0A%0A` +
       `Estou parado e preciso de resgate urgente! 🏁🆘`;
     return `https://wa.me/558387426823?text=${text}`;
   };
@@ -31,6 +38,13 @@ export function SOSSection() {
       
       <div className="max-w-4xl mx-auto relative z-10 text-center">
         <FadeIn>
+           <div className="inline-flex items-center gap-2 mb-4 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full">
+             <span className="relative flex h-2 w-2">
+               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+             </span>
+             <span className="text-red-500 font-display tracking-[0.2em] uppercase text-[10px] font-black">Sistema de Triagem: Online</span>
+           </div>
            <h2 className="text-4xl md:text-8xl font-display font-black text-white uppercase italic tracking-tighter mb-8 italic">
               CENTRO DE <span className="text-red-500 underline decoration-red-900">RESGATE 24H</span>
            </h2>
@@ -104,7 +118,14 @@ export function SOSSection() {
                    ENVIAR AGORA VIA WHATSAPP
                 </Button>
               </a>
-              <button onClick={() => setStep(1)} className="text-white/30 hover:text-white text-xs uppercase font-black underline tracking-widest">Refazer Triagem</button>
+              <div className="flex flex-col gap-4">
+                <button onClick={() => setStep(2)} className="text-white/50 hover:text-white text-sm uppercase font-bold tracking-widest transition-colors">
+                  ← Ajustar Informações
+                </button>
+                <button onClick={() => { setStep(1); setSosData({ modelo: '', problema: '' }); }} className="text-white/20 hover:text-white/40 text-[10px] uppercase font-black underline tracking-widest">
+                  Reiniciar Tudo
+                </button>
+              </div>
             </div>
           )}
         </FadeIn>

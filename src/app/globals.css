@@ -25,6 +25,14 @@
   --animate-fade-in: fadeIn 0.5s ease-out forwards;
   --animate-slide-up: slideUp 0.5s ease-out forwards;
   --animate-shine: shine 3s infinite linear;
+  --animate-shake: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+
+  @keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+  }
 
   @keyframes fadeIn {
     from { opacity: 0; }
@@ -119,6 +127,7 @@ body::after {
   pointer-events: none;
   z-index: -1;
   animation: streetflow 12s linear infinite;
+  will-change: transform;
 }
 
 @keyframes streetflow {

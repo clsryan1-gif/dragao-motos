@@ -19,6 +19,8 @@ export default function AgendamentoPage() {
     mensagem: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -36,8 +38,35 @@ export default function AgendamentoPage() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!selectedService) newErrors.servico = "Por favor, escolha um dos planos de revisão acima.";
+    if (!formData.nome.trim()) newErrors.nome = "Precisamos saber o seu nome.";
+    if (!formData.whatsapp.trim()) newErrors.whatsapp = "Como vamos entrar em contato? Informe seu WhatsApp.";
+    if (formData.whatsapp.replace(/\D/g, '').length < 10) newErrors.whatsapp = "Este número parece estar incompleto.";
+    if (!formData.moto.trim()) newErrors.moto = "Diga pra gente qual sua moto para prepararmos as ferramentas certas.";
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Marcar todos como tocados para mostrar erros
+    setTouched({
+      nome: true,
+      whatsapp: true,
+      moto: true,
+      servico: true
+    });
+
+    if (!validate()) {
+      // Scroll para o primeiro erro
+      const firstError = document.querySelector('.text-red-500');
+      firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
     
     // Gerar mensagem para WhatsApp
     const serviceName = SERVICES_DATA.find(s => s.id === selectedService)?.title || 'Serviço Geral';
@@ -117,20 +146,27 @@ export default function AgendamentoPage() {
             <FadeIn delay={200}>
               <div className="space-y-4 md:space-y-6">
                 <h2 className="text-xl md:text-2xl font-display font-bold uppercase tracking-widest flex items-center gap-3">
-                  <Motorbike className="text-neon-verde" /> 1. Escolha o Serviço
+                  <Motorbike className="text-neon-verde" /> 1. Qual serviço sua moto precisa?
                 </h2>
+                {touched.servico && errors.servico && (
+                  <p className="text-red-500 text-xs font-bold uppercase tracking-widest animate-pulse">{errors.servico}</p>
+                )}
                 <div role="radiogroup" aria-label="Selecione um serviço" className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {SERVICES_DATA.map((service) => (
                     <button 
                       key={service.id}
                       type="button"
-                      onClick={() => setSelectedService(service.id)}
+                      onClick={() => {
+                        setSelectedService(service.id);
+                        setErrors(prev => ({ ...prev, servico: '' }));
+                        setTouched(prev => ({ ...prev, servico: true }));
+                      }}
                       aria-checked={selectedService === service.id}
                       role="radio"
                       className={`cursor-pointer p-6 border transition-all duration-300 group text-left w-full ${
                         selectedService === service.id 
                         ? 'bg-neon-verde/10 border-neon-verde shadow-neon' 
-                        : 'bg-grafite border-grafite-claro hover:border-white/30'
+                        : (touched.servico && errors.servico ? 'bg-red-500/5 border-red-500/50' : 'bg-grafite border-grafite-claro hover:border-white/30')
                       }`}
                     >
                       <div className="flex justify-between items-start mb-4">
@@ -153,56 +189,83 @@ export default function AgendamentoPage() {
             <FadeIn delay={400}>
               <div className="space-y-4 md:space-y-6">
                 <h2 className="text-xl md:text-2xl font-display font-bold uppercase tracking-widest flex items-center gap-3">
-                  <User className="text-neon-verde" /> 2. Seus Dados
+                  <User className="text-neon-verde" /> 2. Fale um pouco sobre você e sua máquina
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label htmlFor="nome" className="text-xs uppercase font-bold tracking-widest text-white/50 ml-1 cursor-pointer">Seu Nome</label>
+                    <label htmlFor="nome" className="text-xs uppercase font-bold tracking-widest text-white/50 ml-1 cursor-pointer">Qual seu nome?</label>
                     <input 
                       required
                       id="nome"
                       type="text" 
                       name="nome"
                       value={formData.nome}
-                      onChange={handleInputChange}
-                      placeholder="Ex: Ryan Silva"
+                      onChange={(e) => {
+                        handleInputChange(e);
+                        setTouched(prev => ({ ...prev, nome: true }));
+                      }}
+                      onBlur={() => setTouched(prev => ({ ...prev, nome: true }))}
+                      placeholder="Ex: Ryan Silva (Seu nome completo)"
                       autoComplete="name"
                       enterKeyHint="next"
-                      className="w-full bg-grafite border border-grafite-claro p-4 focus:border-neon-verde focus:outline-none transition-colors font-sans"
+                      className={`w-full bg-grafite border p-4 focus:border-neon-verde focus:outline-none transition-colors font-sans ${
+                        touched.nome && !formData.nome.trim() ? 'border-red-500 bg-red-500/5 animate-shake' : 'border-grafite-claro'
+                      }`}
                     />
+                    {touched.nome && !formData.nome.trim() && (
+                      <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest">Precisamos do seu nome</p>
+                    )}
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="whatsapp" className="text-xs uppercase font-bold tracking-widest text-white/50 ml-1 cursor-pointer">WhatsApp</label>
+                    <label htmlFor="whatsapp" className="text-xs uppercase font-bold tracking-widest text-white/50 ml-1 cursor-pointer">Seu WhatsApp para contato</label>
                     <input 
                       required
                       id="whatsapp"
                       type="tel" 
                       name="whatsapp"
                       value={formData.whatsapp}
-                      onChange={handleInputChange}
-                      placeholder="(00) 00000-0000"
+                      onChange={(e) => {
+                        handleInputChange(e);
+                        setTouched(prev => ({ ...prev, whatsapp: true }));
+                      }}
+                      onBlur={() => setTouched(prev => ({ ...prev, whatsapp: true }))}
+                      placeholder="(83) 99999-9999 (Seu WhatsApp)"
                       inputMode="tel"
                       autoComplete="tel"
                       enterKeyHint="next"
-                      className="w-full bg-grafite border border-grafite-claro p-4 focus:border-neon-verde focus:outline-none transition-colors font-sans"
+                      className={`w-full bg-grafite border p-4 focus:border-neon-verde focus:outline-none transition-colors font-sans ${
+                        touched.whatsapp && (!formData.whatsapp.trim() || formData.whatsapp.replace(/\D/g, '').length < 10) ? 'border-red-500 bg-red-500/5 animate-shake' : 'border-grafite-claro'
+                      }`}
                     />
+                    {touched.whatsapp && !formData.whatsapp.trim() && (
+                      <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest">Informe seu número de contato</p>
+                    )}
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="moto" className="text-xs uppercase font-bold tracking-widest text-white/50 ml-1 cursor-pointer">Sua Moto (Modelo e Ano)</label>
+                  <label htmlFor="moto" className="text-xs uppercase font-bold tracking-widest text-white/50 ml-1 cursor-pointer">Qual o modelo e ano da sua moto?</label>
                   <input 
                     required
                     id="moto"
                     type="text" 
                     name="moto"
                     value={formData.moto}
-                    onChange={handleInputChange}
-                    placeholder="Ex: Honda Hornet 600 - 2012"
-                    className="w-full bg-grafite border border-grafite-claro p-4 focus:border-neon-verde focus:outline-none transition-colors font-sans"
+                    onChange={(e) => {
+                      handleInputChange(e);
+                      setTouched(prev => ({ ...prev, moto: true }));
+                    }}
+                    onBlur={() => setTouched(prev => ({ ...prev, moto: true }))}
+                    placeholder="Ex: Honda Hornet 600 - Ano 2012 (Modelo e Ano)"
+                    className={`w-full bg-grafite border p-4 focus:border-neon-verde focus:outline-none transition-colors font-sans ${
+                      touched.moto && !formData.moto.trim() ? 'border-red-500 bg-red-500/5 animate-shake' : 'border-grafite-claro'
+                    }`}
                   />
+                  {touched.moto && !formData.moto.trim() && (
+                    <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest">Precisamos saber qual é a máquina</p>
+                  )}
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="mensagem" className="text-xs uppercase font-bold tracking-widest text-white/50 ml-1 cursor-pointer">Mensagem ou Problema (Opcional)</label>
+                  <label htmlFor="mensagem" className="text-xs uppercase font-bold tracking-widest text-white/50 ml-1 cursor-pointer">Quer deixar algum recado ou detalhe extra? (Opcional)</label>
                   <textarea 
                     id="mensagem"
                     name="mensagem"
@@ -217,20 +280,29 @@ export default function AgendamentoPage() {
             </FadeIn>
 
             <FadeIn delay={600}>
-              <Button 
-                type="submit"
-                disabled={!selectedService || !formData.nome || !formData.whatsapp || !formData.moto}
-                variant="neon" 
-                size="lg" 
-                className="w-full group"
-                aria-label="Confirmar Agendamento e abrir WhatsApp"
-              >
-                Confirmar Agendamento via WhatsApp
-                <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <p className="text-center text-white/40 text-xs mt-4">
-                *Ao clicar, você será redirecionado para o WhatsApp para finalizar o envio.
-              </p>
+              <div className="space-y-4">
+                {Object.keys(errors).length > 0 && touched.nome && (
+                  <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-lg flex items-center gap-3 animate-shake">
+                    <CheckCircle2 className="w-5 h-5 text-red-500 rotate-180" />
+                    <p className="text-red-500 text-sm font-bold uppercase tracking-widest">
+                      Opa! Quase lá. Preencha os campos destacados em vermelho acima.
+                    </p>
+                  </div>
+                )}
+                <Button 
+                  type="submit"
+                  variant="neon" 
+                  size="lg" 
+                  className="w-full group"
+                  aria-label="Confirmar Agendamento e abrir WhatsApp"
+                >
+                  Confirmar Agendamento via WhatsApp
+                  <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+                <p className="text-center text-white/40 text-[10px] uppercase font-bold tracking-widest">
+                  *Ao clicar, você será enviado para o WhatsApp para dar o OK final.
+                </p>
+              </div>
             </FadeIn>
           </form>
         </div>

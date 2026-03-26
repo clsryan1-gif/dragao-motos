@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Navbar } from '@/components/layout/Navbar';
 import { Hero } from '@/components/sections/Hero';
+import { SOSSection } from '@/components/sections/SOSSection';
 import { HomeAddress } from '@/components/sections/HomeAddress';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { Footer } from '@/components/layout/Footer';
@@ -28,6 +29,9 @@ export default function Home() {
       
       <div className="flex-grow">
         <Hero />
+        <div id="sos">
+          <SOSSection />
+        </div>
         <HomeAddress />
       </div>
 

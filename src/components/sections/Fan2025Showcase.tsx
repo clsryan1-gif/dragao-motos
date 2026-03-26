@@ -6,12 +6,12 @@ import { FadeIn } from '@/components/ui/FadeIn';
 
 const images = [
   {
-    src: '/images/galeria/fan2025_01.jpg',
+    src: '/images/galeria/fan2025_01.png',
     title: 'Comandos de Precisão',
     aspect: 'Aspecto: Aço Escovado e Controles Inteiros'
   },
   {
-    src: '/images/galeria/fan2025_02.jpg',
+    src: '/images/galeria/fan2025_02.png',
     title: 'Tanque & Cockpit',
     aspect: 'Aspecto: Brilho Metálico Intenso'
   },
@@ -21,12 +21,12 @@ const images = [
     aspect: 'Aspecto: Ajuste Técnico de Elite'
   },
   {
-    src: '/images/galeria/fan2025_04.jpg',
+    src: '/images/galeria/fan2025_04.png',
     title: 'Estrutura Frontal',
     aspect: 'Aspecto: Geometria e Estabilidade'
   },
   {
-    src: '/images/galeria/fan2025_05.jpg',
+    src: '/images/galeria/fan2025_05.png',
     title: 'Finalização & Limpeza',
     aspect: 'Aspecto: Cromo Polido e Fundo Industrial'
   }
@@ -57,6 +57,10 @@ export function Fan2025Showcase() {
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110 contrast-[1.1] brightness-[1.1] grayscale-[0.2]"
               />
+              {/* Marca d'água da Logo */}
+              <div className="absolute top-6 right-6 w-16 h-16 opacity-40 group-hover:opacity-100 transition-opacity z-20 pointer-events-none">
+                 <Image src="/images/logo/logo.png" alt="" fill className="object-contain" />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8 text-left">
                 <p className="text-neon-verde font-bold uppercase tracking-widest text-xs mb-2">{images[2].aspect}</p>
                 <h3 className="text-white text-3xl font-display font-black uppercase italic tracking-tighter">{images[2].title}</h3>
@@ -75,6 +79,10 @@ export function Fan2025Showcase() {
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110 contrast-[1.2] brightness-[0.9] saturate-[0.8]"
               />
+              {/* Marca d'água da Logo */}
+              <div className="absolute top-4 right-4 w-10 h-10 opacity-30 group-hover:opacity-80 transition-opacity z-20 pointer-events-none">
+                 <Image src="/images/logo/logo.png" alt="" fill className="object-contain" />
+              </div>
               <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-500" />
               <div className="absolute bottom-4 left-6 text-left">
                 <h3 className="text-white text-xl font-display font-black uppercase italic tracking-tighter">{images[0].title}</h3>
@@ -90,7 +98,11 @@ export function Fan2025Showcase() {
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110 contrast-[1.1] brightness-[1.1]"
               />
-               <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-500" />
+               {/* Marca d'água da Logo */}
+               <div className="absolute top-4 right-4 w-10 h-10 opacity-30 group-hover:opacity-80 transition-opacity z-20 pointer-events-none">
+                 <Image src="/images/logo/logo.png" alt="" fill className="object-contain" />
+              </div>
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-500" />
                <div className="absolute bottom-4 left-6 text-left">
                 <h3 className="text-white text-xl font-display font-black uppercase italic tracking-tighter">{images[1].title}</h3>
               </div>
@@ -106,6 +118,10 @@ export function Fan2025Showcase() {
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110 contrast-[1.2] brightness-[0.8] grayscale-[0.3]"
               />
+               {/* Marca d'água da Logo */}
+               <div className="absolute top-4 right-4 w-10 h-10 opacity-30 group-hover:opacity-80 transition-opacity z-20 pointer-events-none">
+                 <Image src="/images/logo/logo.png" alt="" fill className="object-contain" />
+              </div>
                <div className="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors duration-500" />
                <div className="absolute bottom-4 left-6 text-left">
                 <h3 className="text-white text-2xl font-display font-black uppercase italic tracking-tighter">{images[3].title}</h3>
@@ -121,6 +137,10 @@ export function Fan2025Showcase() {
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110 contrast-125 brightness-110"
               />
+               {/* Marca d'água da Logo */}
+               <div className="absolute top-4 right-4 w-12 h-12 opacity-50 group-hover:opacity-100 transition-opacity z-20 pointer-events-none">
+                  <Image src="/images/logo/logo.png" alt="" fill className="object-contain" />
+               </div>
                <div className="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors duration-500" />
                <div className="absolute bottom-4 left-6 text-left">
                 <h3 className="text-white text-2xl font-display font-black uppercase italic tracking-tighter">{images[4].title}</h3>

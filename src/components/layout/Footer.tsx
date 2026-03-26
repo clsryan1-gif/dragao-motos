@@ -48,16 +48,7 @@ export function Footer() {
           </ul>
         </div>
 
-        <div>
-          <h4 className="font-display text-2xl font-bold text-white mb-6 uppercase tracking-wider">Onde Estamos</h4>
-          <p className="font-sans text-white/60 mb-4 leading-relaxed">
-            {CONTACT_INFO.address}<br />
-            CEP: {CONTACT_INFO.cep}
-          </p>
-          <a href="https://www.google.com/maps/search/oficina+de+motos" target="_blank" rel="noopener noreferrer">
-            <Button variant="outline" size="sm" className="w-full h-11">Ver no Google Maps</Button>
-          </a>
-        </div>
+
       </div>
 
       <div className="max-w-7xl mx-auto border-t border-grafite pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-sans text-white/40 uppercase tracking-widest text-center md:text-left">

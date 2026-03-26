@@ -1,9 +1,11 @@
-const CACHE_NAME = 'dragao-pwa-v8';
+const CACHE_NAME = 'dragao-pwa-v9';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
   '/icon-pwa-192.png',
   '/icon-pwa-512.png',
+  'https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&display=swap',
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap'
 ];
 
 // Instalação: Cacheia ativos estáticos essenciais (App Shell)

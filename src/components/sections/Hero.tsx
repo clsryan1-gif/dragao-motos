@@ -54,13 +54,8 @@ export function Hero() {
                 Agendar Serviço
               </Button>
             </Link>
-            <a 
-              href="https://wa.me/558387426823?text=%F0%9F%86%98%20AJUDA%20URGENTE!%20Minha%20moto%20me%20deixou%20na%20m%C3%A3o%20e%20preciso%20do%20Resgate%20do%20Drag%C3%A3o%20agora!%20%E2%80%BC%EF%B8%8F" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="w-full sm:flex-1"
-            >
-              <Button variant="sos" size="lg" className="w-full">
+            <a href="#sos" className="w-full sm:flex-1" aria-label="Rolar para Triagem de Resgate SOS">
+              <Button variant="sos" size="lg" className="w-full" type="button">
                 🚨 SOS RESGATE 🚨
               </Button>
             </a>
