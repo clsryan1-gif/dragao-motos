@@ -10,12 +10,40 @@ import { supabase, supabaseUrl, supabaseKey } from '@/lib/supabase';
 import { deleteGalleryImage, updateGalleryImage } from '@/app/admin/actions';
 import { DiagnosticOverlay } from '@/components/ui/DiagnosticOverlay';
 import { cn } from '@/lib/utils';
+import { Edit3, Check, Save } from 'lucide-react';
 
 export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdmin?: boolean }) {
   const [isEditing, setIsEditing] = useState(false);
   const { showToast } = useToast();
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [editingInfoId, setEditingInfoId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState({ title: '', description: '' });
+
+  const handleUpdateInfo = async (id: string) => {
+    setUpdatingId(id);
+    try {
+      await updateGalleryImage(id, { 
+        title: editForm.title, 
+        description: editForm.description 
+      });
+      showToast('METADADOS ATUALIZADOS', 'success');
+      setEditingInfoId(null);
+      window.location.reload();
+    } catch (err: any) {
+      setErrorMsg(err.message || 'ERRO AO ATUALIZAR INFO');
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const startEditing = (img: any) => {
+    setEditForm({ 
+      title: img.title || '', 
+      description: img.aspect || '' 
+    });
+    setEditingInfoId(img.id);
+  };
 
   const handleDeleteCard = async (id: string) => {
     if (!id || id.startsWith('static-')) {
@@ -113,47 +141,117 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
     images.push(defaultImages[i]);
   }
 
-  const AdminCardOverlay = ({ id }: { id: string }) => {
+  const AdminCardOverlay = ({ image }: { image: any }) => {
+    const id = image.id;
     const isStatic = id.startsWith('static-');
     const isUpdating = updatingId === id;
+    const isEditingThis = editingInfoId === id;
 
     if (!isAdmin || !isEditing) return null;
 
     return (
-      <div className="absolute inset-0 z-30 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-2">Painel de Ajuste</p>
-        
-        <div className="flex items-center gap-3">
-          <label className={cn(
-            "p-3 bg-neon-verde text-black rounded-xl cursor-pointer hover:scale-110 active:scale-95 transition-all shadow-neon",
-            (isUpdating || isStatic) && "opacity-50 cursor-not-allowed"
-          )}>
-            {isUpdating ? <Zap size={18} className="animate-pulse" /> : <ImageIcon size={18} />}
-            <input 
-              type="file" 
-              className="hidden" 
-              disabled={isUpdating || isStatic} 
-              onChange={(e) => handleReplaceImage(e, id)}
-              accept="image/*"
-            />
-          </label>
+      <>
+        <div className="absolute inset-0 z-30 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-6">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-2">Painel de Ajuste</p>
+          
+          <div className="flex items-center gap-3">
+            {/* Botão de Substituir Foto */}
+            <label className={cn(
+              "p-3 bg-neon-verde text-black rounded-xl cursor-pointer hover:scale-110 active:scale-95 transition-all shadow-neon",
+              (isUpdating || isStatic) && "opacity-50 cursor-not-allowed"
+            )}>
+              {isUpdating ? <Zap size={18} className="animate-pulse" /> : <ImageIcon size={18} />}
+              <input 
+                type="file" 
+                className="hidden" 
+                disabled={isUpdating || isStatic} 
+                onChange={(e) => handleReplaceImage(e, id)}
+                accept="image/*"
+              />
+            </label>
 
-          <button 
-            onClick={() => handleDeleteCard(id)}
-            disabled={isStatic}
-            className={cn(
-              "p-3 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-lg",
-              isStatic && "opacity-20 cursor-not-allowed"
-            )}
-          >
-            <Trash2 size={18} />
-          </button>
+            {/* Botão de Editar Metadados */}
+            <button 
+              onClick={() => startEditing(image)}
+              disabled={isStatic}
+              className={cn(
+                "p-3 bg-white/10 border border-white/20 text-white rounded-xl hover:bg-white hover:text-black transition-all",
+                isStatic && "opacity-20 cursor-not-allowed"
+              )}
+            >
+              <Edit3 size={18} />
+            </button>
+
+            {/* Botão de Deletar */}
+            <button 
+              onClick={() => handleDeleteCard(id)}
+              disabled={isStatic}
+              className={cn(
+                "p-3 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-lg",
+                isStatic && "opacity-20 cursor-not-allowed"
+              )}
+            >
+              <Trash2 size={18} />
+            </button>
+          </div>
+          
+          {isStatic && (
+            <p className="text-[8px] text-white/20 uppercase font-black tracking-widest mt-2">Mídia do Sistema</p>
+          )}
         </div>
-        
-        {isStatic && (
-          <p className="text-[8px] text-white/20 uppercase font-black tracking-widest mt-2">Mídia do Sistema</p>
+
+        {/* Modal de Edição de Info */}
+        {isEditingThis && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
+            <div className="bg-aco-grad border-chrome p-8 rounded-[2.5rem] max-w-md w-full shadow-2xl relative">
+              <button 
+                onClick={() => setEditingInfoId(null)}
+                className="absolute top-6 right-6 text-white/40 hover:text-white"
+              >
+                <X size={20} />
+              </button>
+
+              <h4 className="text-sm font-black uppercase tracking-widest mb-8 flex items-center gap-2">
+                <Edit3 size={16} className="text-neon-verde" />
+                Refinar Identidade Visual
+              </h4>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40 mb-2 block ml-2">Título da Mídia</label>
+                  <input 
+                    type="text" 
+                    value={editForm.title}
+                    onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-white outline-none focus:border-neon-verde/50 transition-all font-sans"
+                    placeholder="Ex: Motor Fan 2025"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40 mb-2 block ml-2">Especificação Técnica (Tag)</label>
+                  <input 
+                    type="text" 
+                    value={editForm.description}
+                    onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-white outline-none focus:border-neon-verde/50 transition-all font-sans"
+                    placeholder="Ex: Aspecto: Cromo Polido"
+                  />
+                </div>
+
+                <button 
+                  onClick={() => handleUpdateInfo(id)}
+                  disabled={isUpdating}
+                  className="w-full bg-neon-verde text-black p-5 rounded-2xl flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-all font-display font-black uppercase italic tracking-widest shadow-neon"
+                >
+                  {isUpdating ? <Zap size={18} className="animate-pulse" /> : <Save size={18} />}
+                  {isUpdating ? 'PROCESSANDO...' : 'SALVAR ALTERAÇÕES'}
+                </button>
+              </div>
+            </div>
+          </div>
         )}
-      </div>
+      </>
     );
   };
 
@@ -198,7 +296,7 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
           {/* Main Hero Shot */}
           <FadeIn className="md:col-span-4 md:row-span-2">
             <div className="relative aspect-video md:aspect-square group overflow-hidden border-2 border-white/10 rounded-3xl shadow-2xl">
-              <AdminCardOverlay id={images[2].id} />
+              <AdminCardOverlay image={images[2]} />
               <Image 
                 src={images[2].src} 
                 alt={images[2].title}
@@ -221,7 +319,7 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
           {/* Side Shots */}
           <FadeIn delay={100} className="md:col-span-2">
             <div className="relative aspect-video group overflow-hidden border-2 border-white/10 rounded-2xl shadow-xl">
-              <AdminCardOverlay id={images[0].id} />
+              <AdminCardOverlay image={images[0]} />
               <Image 
                 src={images[0].src} 
                 alt={images[0].title}
@@ -241,7 +339,7 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
 
           <FadeIn delay={200} className="md:col-span-2">
             <div className="relative aspect-video group overflow-hidden border-2 border-white/10 rounded-2xl shadow-xl">
-              <AdminCardOverlay id={images[1].id} />
+              <AdminCardOverlay image={images[1]} />
               <Image 
                 src={images[1].src} 
                 alt={images[1].title}
@@ -262,7 +360,7 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
           {/* Bottom Row */}
           <FadeIn delay={300} className="md:col-span-3">
             <div className="relative aspect-video group overflow-hidden border-chrome rounded-2xl shadow-xl">
-              <AdminCardOverlay id={images[3].id} />
+              <AdminCardOverlay image={images[3]} />
               <Image 
                 src={images[3].src} 
                 alt={images[3].title}
@@ -282,7 +380,7 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
 
           <FadeIn delay={400} className="md:col-span-3">
             <div className="relative aspect-video group overflow-hidden border-chrome rounded-2xl shadow-xl">
-              <AdminCardOverlay id={images[4].id} />
+              <AdminCardOverlay image={images[4]} />
               <Image 
                 src={images[4].src} 
                 alt={images[4].title}
