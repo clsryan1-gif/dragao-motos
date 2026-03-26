@@ -259,9 +259,9 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
     <section id="galeria" className="py-20 md:py-32 px-6 md:px-12 bg-aco-escovado relative overflow-hidden text-center">
       {errorMsg && <DiagnosticOverlay error={errorMsg} onClose={() => setErrorMsg(null)} />}
       
-      {/* BOTÃO DE CONTROLE ADMIN INLINE */}
+      {/* BOTÃO DE CONTROLE ADMIN INLINE - AGORA NO TOPO */}
       {isAdmin && (
-        <div className="fixed bottom-12 right-12 z-[100]">
+        <div className="mb-12 flex justify-center">
           <button 
             onClick={() => setIsEditing(!isEditing)}
             className="flex items-center gap-3 bg-neon-verde text-black px-8 py-5 rounded-full font-display font-black uppercase italic tracking-widest shadow-neon hover:scale-110 active:scale-95 transition-all outline-none border-none ring-4 ring-black/20"
