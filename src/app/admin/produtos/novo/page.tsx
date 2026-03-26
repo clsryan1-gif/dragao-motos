@@ -34,6 +34,15 @@ export default function NovoProdutoPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Verificação de Integridade das Keys
+    const isSupabaseConfigured = !supabaseUrl.includes('placeholder') && !supabaseKey.includes('placeholder');
+
+    if (file && !isSupabaseConfigured) {
+      showToast('ERRO: SUPABASE NÃO CONFIGURADO NO .ENV', 'error');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -42,14 +51,15 @@ export default function NovoProdutoPage() {
       if (file) {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-        const filePath = `peças/${fileName}`;
+        const filePath = `pecas/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
           .from('dragaomotos')
           .upload(filePath, file);
 
         if (uploadError) {
-          throw new Error('Erro no upload da imagem no Supabase');
+          console.error('Upload Error:', uploadError);
+          throw new Error('Falha no upload para o Supabase');
         }
 
         const { data: publicUrlData } = supabase.storage
@@ -65,18 +75,21 @@ export default function NovoProdutoPage() {
         body: JSON.stringify({
           ...formData,
           imagem: imageUrl,
-          preco: parseFloat(formData.preco),
+          preco: parseFloat(formData.preco.replace(',', '.')),
           estoque: parseInt(formData.estoque),
         }),
       });
 
-      if (!res.ok) throw new Error('Erro ao cadastrar');
+      const data = await res.json();
 
-      showToast('Novo componente integrado ao sistema!', 'success');
+      if (!res.ok) throw new Error(data.message || 'Erro ao cadastrar');
+
+      showToast('NOVO COMPONENTE INTEGRADO AO SISTEMA!', 'success');
       router.push('/admin/produtos');
       router.refresh();
-    } catch (err) {
-      showToast('Falha crítica no upload de dados.', 'error');
+    } catch (err: any) {
+      console.error('Cadastro Error:', err);
+      showToast(err.message || 'FALHA CRÍTICA NO UPLOAD DE DADOS.', 'error');
     } finally {
       setLoading(false);
     }
@@ -103,12 +116,15 @@ export default function NovoProdutoPage() {
         {/* COLUNA PREVIEW (ESQUERDA) */}
         <div className="md:col-span-1 space-y-6">
            <div className="bg-aco-grad border-2 border-white/5 rounded-[2.5rem] p-6 aspect-square flex flex-col items-center justify-center relative overflow-hidden group">
-              {previewUrl || formData.imagem ? (
+              {previewUrl || (formData.imagem && formData.imagem.startsWith('http')) ? (
                 <img src={previewUrl || formData.imagem} alt="Preview" className="w-full h-full object-contain relative z-10 p-4" />
               ) : (
                 <div className="flex flex-col items-center gap-4 text-white/10 group-hover:text-neon-verde/20 transition-colors">
                    <ImageIcon size={64} />
-                   <p className="text-[10px] font-black uppercase tracking-widest text-center mt-2">Aguardando Imagem<br/>(Clique ou arraste)</p>
+                   <div className="text-center">
+                     <p className="text-[10px] font-black uppercase tracking-widest mt-2 font-display italic">Aguardando Imagem</p>
+                     <p className="text-[8px] font-bold uppercase tracking-tighter text-white/20">Click para Upload</p>
+                   </div>
                 </div>
               )}
               

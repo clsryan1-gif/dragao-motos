@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Package, ShoppingCart, Users, Wallet, TrendingUp, AlertTriangle, ArrowRight, PlusCircle, UserPlus, Receipt, Gauge, Terminal, Activity } from "lucide-react";
+import { Package, ShoppingCart, Users, Wallet, AlertTriangle, ArrowRight, PlusCircle, UserPlus, Receipt, Terminal, Activity } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -194,19 +194,32 @@ export default async function AdminDashboard() {
 
 function MetricCard({ label, value, icon: Icon, color }: { label: string, value: string, icon: any, color: 'neon' | 'white' }) {
   return (
-    <div className="bg-aco-grad border-chrome rounded-3xl p-6 relative overflow-hidden group shadow-xl hover:translate-y-[-5px] transition-all">
+    <div className="bg-aco-grad border-chrome rounded-[2rem] p-6 relative overflow-hidden group shadow-2xl hover:translate-y-[-2px] transition-all h-[160px] flex flex-col justify-between">
+      {/* Background Glow */}
       <div className={cn(
-        "absolute -top-10 -right-10 w-32 h-32 blur-[50px] rounded-full opacity-10 group-hover:opacity-20 transition-all",
+        "absolute -top-10 -right-10 w-32 h-32 blur-[60px] rounded-full opacity-5 group-hover:opacity-10 transition-all",
         color === 'neon' ? 'bg-neon-verde' : 'bg-white'
       )}></div>
+      
+      {/* Icon Container */}
       <div className={cn(
-        "w-10 h-10 rounded-xl flex items-center justify-center mb-4 border",
-        color === 'neon' ? 'bg-neon-verde/10 border-neon-verde/20 text-neon-verde' : 'bg-white/10 border-white/20 text-white'
+        "w-12 h-12 rounded-2xl flex items-center justify-center border backdrop-blur-sm transition-all shadow-lg",
+        color === 'neon' 
+          ? 'bg-neon-verde/10 border-neon-verde/30 text-neon-verde shadow-neon/10' 
+          : 'bg-white/5 border-white/10 text-white/60'
       )}>
-        <Icon size={20} />
+        <Icon size={24} strokeWidth={1.5} />
       </div>
-      <p className="text-white/40 font-black uppercase tracking-widest text-[8px] mb-1">{label}</p>
-      <div className="text-xl md:text-2xl font-display font-black uppercase italic tracking-tighter">{value}</div>
+
+      <div className="space-y-1">
+        <p className="text-white/30 font-black uppercase tracking-[0.2em] text-[8px] md:text-[9px] ml-1">{label}</p>
+        <div className="text-2xl md:text-3xl font-display font-black uppercase italic tracking-tighter text-white drop-shadow-sm">
+          {value}
+        </div>
+      </div>
+
+      {/* Subtle Scanline Effect */}
+      <div className="absolute inset-0 bg-scanline pointer-events-none opacity-[0.02]"></div>
     </div>
   );
 }

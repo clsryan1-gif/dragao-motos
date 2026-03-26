@@ -128,14 +128,14 @@ export default function OrderListAdmin({ initialOrders }: { initialOrders: Order
                                  <h4 className="text-[10px] font-black uppercase tracking-widest text-white/30 flex items-center gap-2">
                                     <Package size={14} /> Equips Carregados
                                  </h4>
-                                 <div className="space-y-3">
-                                    {order.items.map((item, idx) => (
+                                  <div className="space-y-3">
+                                    {order.items.map((item: any, idx) => (
                                       <div key={idx} className="flex justify-between items-center text-[11px] font-bold">
-                                         <span className="text-white/80">{item.quantidade}x {item.product.nome}</span>
-                                         <span className="text-neon-verde/50">{BRL(item.preco * item.quantidade)}</span>
+                                         <span className="text-white/80">{item.quantity}x {item.product.nome}</span>
+                                         <span className="text-neon-verde/50">{BRL(item.price * item.quantity)}</span>
                                       </div>
                                     ))}
-                                 </div>
+                                  </div>
                               </div>
                               {/* Perfil Piloto */}
                               <div className="bg-black/40 border border-white/5 p-6 rounded-2xl space-y-4">
