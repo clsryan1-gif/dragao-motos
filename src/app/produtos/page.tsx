@@ -8,8 +8,8 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import ProdutoListRow from '@/components/catalog/ProdutoListRow';
 import { ProductListSkeleton, CategorySkeleton } from '@/components/catalog/ProductSkeleton';
-import { Toast } from '@/components/ui/Toast';
 import { useCart } from '@/context/CartContext';
+import { CartFloatBar } from '@/components/catalog/CartFloatBar';
 
 // ===================================================
 // Tipagem e Helpers
@@ -220,6 +220,7 @@ export default function ProdutosPage() {
       </main>
 
       <Footer />
+      <CartFloatBar />
     </div>
   );
 }
