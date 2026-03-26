@@ -77,35 +77,35 @@ export default function LoginPage() {
         className="w-full max-w-md relative z-10"
       >
         {/* Logo/Title */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-6">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="inline-block mb-4 p-4 rounded-2xl bg-aco-grad border-chrome relative group"
+            className="inline-block mb-3 p-3 rounded-2xl bg-aco-grad border-chrome relative group"
           >
             <div className="absolute inset-0 bg-neon-verde/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <Zap size={40} className="text-neon-verde relative z-10" />
+            <Zap size={32} className="text-neon-verde relative z-10" />
           </motion.div>
-          <h1 className="text-5xl font-display font-black uppercase italic tracking-tighter text-metallic mb-2">
+          <h1 className="text-4xl font-display font-black uppercase italic tracking-tighter text-metallic mb-1">
             DRAGÃO <span className="text-white">MOTOS</span>
           </h1>
-          <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em]">
+          <p className="text-white/40 text-[9px] font-black uppercase tracking-[0.3em]">
             Acesso Restrito ao <span className="text-neon-verde">QG</span>
           </p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-aco-grad border-chrome p-8 rounded-[2.5rem] relative overflow-hidden group shadow-2xl">
+        <div className="bg-aco-grad border-chrome p-6 rounded-[2rem] relative overflow-hidden group shadow-2xl">
           {/* Scanline effect mimic */}
           <div className="absolute top-0 left-0 w-full h-[2px] bg-neon-verde/30 animate-[scan_4s_linear_infinite] pointer-events-none"></div>
           
-          <div className="mb-6 flex items-center gap-2 text-neon-verde/60">
+          <div className="mb-4 flex items-center gap-2 text-neon-verde/60">
              <Sparkles size={14} />
              <p className="text-[9px] font-black uppercase tracking-widest italic">Turbine sua moto agora</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6 relative z-10">
+          <form onSubmit={handleLogin} className="space-y-4 relative z-10">
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Piloto / Login</label>
               <div className="relative group/input">
@@ -149,7 +149,7 @@ export default function LoginPage() {
             <button 
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-neon-verde py-5 rounded-2xl text-black font-display font-black uppercase italic text-xl tracking-widest shadow-neon hover:shadow-neon-hover hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group/btn disabled:opacity-50 disabled:cursor-wait"
+              className="w-full bg-neon-verde py-4 rounded-2xl text-black font-display font-black uppercase italic text-xl tracking-widest shadow-neon hover:shadow-neon-hover hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group/btn disabled:opacity-50 disabled:cursor-wait"
             >
               {isSubmitting ? (
                 <div className="flex items-center gap-3">

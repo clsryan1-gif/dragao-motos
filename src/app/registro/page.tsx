@@ -81,48 +81,47 @@ export default function RegistroPage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10"
+        className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-6 items-center relative z-10"
       >
         {/* LADO ESQUERDO: PERSUASÃO E BENEFÍCIOS */}
-        <div className="lg:col-span-5 space-y-8">
-           <div className="space-y-4">
+        <div className="lg:col-span-5 space-y-4">
+           <div className="space-y-3">
               <motion.div
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="inline-block px-4 py-1 rounded-full bg-neon-verde/10 border border-neon-verde/30 text-neon-verde text-[10px] font-black uppercase tracking-[0.3em]"
+                className="inline-block px-3 py-0.5 rounded-full bg-neon-verde/10 border border-neon-verde/30 text-neon-verde text-[9px] font-black uppercase tracking-[0.2em]"
               >
                 Benefícios Exclusivos
               </motion.div>
-              <h2 className="text-4xl md:text-6xl font-display font-black uppercase italic italic leading-none text-white tracking-tighter">
+              <h2 className="text-3xl md:text-5xl font-display font-black uppercase italic leading-none text-white tracking-tighter">
                 VENHA SER UM <br/><span className="text-neon-verde drop-shadow-[0_0_15px_rgba(0,255,51,0.5)]">PILOTO DE ELITE</span>
               </h2>
-              <p className="text-white/40 text-xs font-medium leading-relaxed tracking-wider max-w-md">
+              <p className="text-white/40 text-[10px] font-medium leading-relaxed tracking-wider max-w-sm">
                 Não é apenas um cadastro. É o seu passaporte para a melhor mecânica do Brasil. 
-                Sua moto merece tecnologia de ponta e cuidado especializado.
               </p>
            </div>
 
-           <div className="grid gap-6">
+           <div className="grid gap-4">
               {[
-                { icon: Gift, title: '10% OFF NA PRIMEIRA MÃO', desc: 'Sua primeira manutenção completa com desconto imediato.' },
-                { icon: Trophy, title: 'ACESSO A PEÇAS RARAS', desc: 'Estoque exclusivo de peças que você não acha em lugar nenhum.' },
-                { icon: Star, title: 'RANKING DE PILOTOS', desc: 'Acumule pontos e troque por serviços e brindes oficiais.' },
-                { icon: Bell, title: 'RASTREAMENTO EM TEMPO REAL', desc: 'Acompanhe cada ajuste na sua moto direto pelo seu painel.' }
+                { icon: Gift, title: '10% OFF NA PRIMEIRA MÃO', desc: 'Sua primeira manutenção personalizada.' },
+                { icon: Trophy, title: 'ACESSO A PEÇAS RARAS', desc: 'Estoque exclusivo de itens premium.' },
+                { icon: Star, title: 'RANKING DE PILOTOS', desc: 'Pontue e troque por brindes oficiais.' },
+                { icon: Bell, title: 'RASTREAMENTO REAL', desc: 'Acompanhe cada ajuste na sua moto.' }
               ].map((item, id) => (
                 <motion.div 
                   key={id} 
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: 0.4 + (id * 0.1) }}
-                  className="flex gap-4 group cursor-default"
+                  className="flex gap-3 group cursor-default"
                 >
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-aco-grad border-chrome flex items-center justify-center group-hover:border-neon-verde transition-colors shadow-chrome group-hover:shadow-neon">
-                     <item.icon className="text-white/40 group-hover:text-neon-verde transition-colors" size={20} />
+                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-aco-grad border-chrome flex items-center justify-center group-hover:border-neon-verde transition-colors shadow-chrome group-hover:shadow-neon">
+                     <item.icon className="text-white/40 group-hover:text-neon-verde transition-colors" size={18} />
                   </div>
                   <div>
-                    <h3 className="text-xs font-black uppercase tracking-widest text-white mb-1 group-hover:text-neon-verde transition-colors">{item.title}</h3>
-                    <p className="text-[10px] text-white/30 tracking-wider leading-relaxed">{item.desc}</p>
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-white mb-0.5 group-hover:text-neon-verde transition-colors">{item.title}</h3>
+                    <p className="text-[9px] text-white/30 tracking-wider leading-relaxed">{item.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -131,17 +130,17 @@ export default function RegistroPage() {
 
         {/* LADO DIREITO: FORMULÁRIO */}
         <div className="lg:col-span-7">
-           <div className="bg-aco-grad border-chrome p-8 md:p-12 rounded-[3rem] relative overflow-hidden group shadow-2xl">
+           <div className="bg-aco-grad border-chrome p-6 md:p-8 rounded-[2rem] relative overflow-hidden group shadow-2xl">
               {/* Scanline effect */}
               <div className="absolute top-0 left-0 w-full h-[2px] bg-neon-verde/20 animate-[scan_6s_linear_infinite] pointer-events-none"></div>
 
-              <div className="mb-10 flex items-center justify-between">
+              <div className="mb-6 flex items-center justify-between">
                 <div>
-                  <h1 className="text-3xl font-display font-black uppercase italic tracking-tighter text-metallic leading-none">
+                  <h1 className="text-2xl font-display font-black uppercase italic tracking-tighter text-metallic leading-none">
                     REGISTRO <span className="text-white">OFICIAL</span>
                   </h1>
                 </div>
-                <div className="px-3 py-1 bg-black/40 border border-white/5 rounded-lg text-white/20 text-[8px] font-black tracking-[0.4em]">DS-PROTO_02</div>
+                <div className="px-2 py-0.5 bg-black/40 border border-white/5 rounded-lg text-white/20 text-[7px] font-black tracking-[0.4em]">DS-PROTO_02</div>
               </div>
 
               <form onSubmit={handleRegistro} className="space-y-6 relative z-10">
@@ -223,7 +222,7 @@ export default function RegistroPage() {
                 <button 
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-neon-verde py-5 rounded-2xl text-black font-display font-black uppercase italic text-2xl tracking-widest shadow-neon hover:shadow-neon-hover hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group/btn disabled:opacity-50 disabled:cursor-wait"
+                  className="w-full bg-neon-verde py-4 rounded-2xl text-black font-display font-black uppercase italic text-xl tracking-widest shadow-neon hover:shadow-neon-hover hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group/btn disabled:opacity-50 disabled:cursor-wait"
                 >
                   {isSubmitting ? (
                     <div className="flex items-center gap-3">
@@ -233,7 +232,7 @@ export default function RegistroPage() {
                   ) : (
                     <>
                       AUTORIZAR MEU ACESSO
-                      <UserPlus size={28} className="group-hover:translate-x-1 group-hover:scale-110 transition-transform" />
+                      <UserPlus size={24} className="group-hover:translate-x-1 group-hover:scale-110 transition-transform" />
                     </>
                   )}
                 </button>
