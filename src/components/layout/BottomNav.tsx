@@ -3,11 +3,12 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Bike, Calendar, MessageSquare } from 'lucide-react';
+import { Home, Bike, Calendar, MessageSquare, Package } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { name: 'Início', href: '/', icon: Home },
+  { name: 'Peças', href: '/produtos', icon: Package },
   { name: 'Galeria', href: '/galeria', icon: Bike },
   { name: 'Agendar', href: '/agendamento', icon: Calendar },
   { name: 'SOS', href: '/#sos', icon: MessageSquare, color: 'text-neon-verde' },
