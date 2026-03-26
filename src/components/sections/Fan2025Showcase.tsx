@@ -4,10 +4,68 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { FadeIn } from '@/components/ui/FadeIn';
 import GalleryManager from '@/components/admin/GalleryManager';
-import { Settings, X } from 'lucide-react';
+import { Settings, X, Plus, Trash2, Zap, Image as ImageIcon } from 'lucide-react';
+import { useToast } from '@/context/ToastContext';
+import { supabase, supabaseUrl, supabaseKey } from '@/lib/supabase';
+import { deleteGalleryImage, updateGalleryImage } from '@/app/admin/actions';
+import { DiagnosticOverlay } from '@/components/ui/DiagnosticOverlay';
+import { cn } from '@/lib/utils';
 
 export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdmin?: boolean }) {
   const [isEditing, setIsEditing] = useState(false);
+  const { showToast } = useToast();
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const handleDeleteCard = async (id: string) => {
+    if (!id || id.startsWith('static-')) {
+      showToast('Esta imagem é padrão e não pode ser removida individualmente.', 'error');
+      return;
+    }
+    if (!confirm('Deseja realmente remover esta mídia da galeria?')) return;
+    
+    try {
+      await deleteGalleryImage(id);
+      showToast('MÍDIA REMOVIDA DO SISTEMA', 'success');
+      window.location.reload();
+    } catch (err: any) {
+      setErrorMsg(err.message || 'ERRO AO DELETAR MÍDIA');
+    }
+  };
+
+  const handleReplaceImage = async (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    if (!e.target.files || !e.target.files[0]) return;
+    if (!id || id.startsWith('static-')) {
+      showToast('Apenas imagens reais do banco podem ser substituídas por este seletor.', 'error');
+      return;
+    }
+
+    setUpdatingId(id);
+    const file = e.target.files[0];
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `galeria/${fileName}`;
+
+    try {
+      const { error: uploadError } = await supabase.storage
+        .from('dragaomotos')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = supabase.storage
+        .from('dragaomotos')
+        .getPublicUrl(filePath);
+
+      await updateGalleryImage(id, { url: publicUrlData.publicUrl });
+      showToast('IMAGEM ATUALIZADA COM SUCESSO', 'success');
+      window.location.reload();
+    } catch (err: any) {
+      setErrorMsg(err.message || 'FALHA NA SUBSTITUIÇÃO DA IMAGEM');
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   const defaultImages = [
     {
@@ -55,8 +113,53 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
     images.push(defaultImages[i]);
   }
 
+  const AdminCardOverlay = ({ id }: { id: string }) => {
+    const isStatic = id.startsWith('static-');
+    const isUpdating = updatingId === id;
+
+    if (!isAdmin || !isEditing) return null;
+
+    return (
+      <div className="absolute inset-0 z-30 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-2">Painel de Ajuste</p>
+        
+        <div className="flex items-center gap-3">
+          <label className={cn(
+            "p-3 bg-neon-verde text-black rounded-xl cursor-pointer hover:scale-110 active:scale-95 transition-all shadow-neon",
+            (isUpdating || isStatic) && "opacity-50 cursor-not-allowed"
+          )}>
+            {isUpdating ? <Zap size={18} className="animate-pulse" /> : <ImageIcon size={18} />}
+            <input 
+              type="file" 
+              className="hidden" 
+              disabled={isUpdating || isStatic} 
+              onChange={(e) => handleReplaceImage(e, id)}
+              accept="image/*"
+            />
+          </label>
+
+          <button 
+            onClick={() => handleDeleteCard(id)}
+            disabled={isStatic}
+            className={cn(
+              "p-3 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-lg",
+              isStatic && "opacity-20 cursor-not-allowed"
+            )}
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>
+        
+        {isStatic && (
+          <p className="text-[8px] text-white/20 uppercase font-black tracking-widest mt-2">Mídia do Sistema</p>
+        )}
+      </div>
+    );
+  };
+
   return (
     <section id="galeria" className="py-20 md:py-32 px-6 md:px-12 bg-aco-escovado relative overflow-hidden text-center">
+      {errorMsg && <DiagnosticOverlay error={errorMsg} onClose={() => setErrorMsg(null)} />}
       
       {/* BOTÃO DE CONTROLE ADMIN INLINE */}
       {isAdmin && (
@@ -95,6 +198,7 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
           {/* Main Hero Shot */}
           <FadeIn className="md:col-span-4 md:row-span-2">
             <div className="relative aspect-video md:aspect-square group overflow-hidden border-2 border-white/10 rounded-3xl shadow-2xl">
+              <AdminCardOverlay id={images[2].id} />
               <Image 
                 src={images[2].src} 
                 alt={images[2].title}
@@ -117,6 +221,7 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
           {/* Side Shots */}
           <FadeIn delay={100} className="md:col-span-2">
             <div className="relative aspect-video group overflow-hidden border-2 border-white/10 rounded-2xl shadow-xl">
+              <AdminCardOverlay id={images[0].id} />
               <Image 
                 src={images[0].src} 
                 alt={images[0].title}
@@ -136,6 +241,7 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
 
           <FadeIn delay={200} className="md:col-span-2">
             <div className="relative aspect-video group overflow-hidden border-2 border-white/10 rounded-2xl shadow-xl">
+              <AdminCardOverlay id={images[1].id} />
               <Image 
                 src={images[1].src} 
                 alt={images[1].title}
@@ -156,6 +262,7 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
           {/* Bottom Row */}
           <FadeIn delay={300} className="md:col-span-3">
             <div className="relative aspect-video group overflow-hidden border-chrome rounded-2xl shadow-xl">
+              <AdminCardOverlay id={images[3].id} />
               <Image 
                 src={images[3].src} 
                 alt={images[3].title}
@@ -175,6 +282,7 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
 
           <FadeIn delay={400} className="md:col-span-3">
             <div className="relative aspect-video group overflow-hidden border-chrome rounded-2xl shadow-xl">
+              <AdminCardOverlay id={images[4].id} />
               <Image 
                 src={images[4].src} 
                 alt={images[4].title}

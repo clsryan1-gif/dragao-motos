@@ -58,7 +58,14 @@ export async function addGalleryImage(url: string, title?: string, description?:
 
 export async function deleteGalleryImage(id: string) {
   await prisma.gallery.delete({ where: { id } });
-  revalidatePath('/admin/galeria');
+  revalidatePath('/galeria');
+}
+
+export async function updateGalleryImage(id: string, data: { url?: string, title?: string, description?: string }) {
+  await prisma.gallery.update({
+    where: { id },
+    data
+  });
   revalidatePath('/galeria');
 }
 

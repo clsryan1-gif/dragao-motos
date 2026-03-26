@@ -59,16 +59,6 @@ export default function GalleryManager({ initialImages }: { initialImages: any[]
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Deseja realmente remover esta mídia?')) return;
-    try {
-      await deleteGalleryImage(id);
-      setImages(images.filter(img => img.id !== id));
-      showToast('MÍDIA REMOVIDA DO SISTEMA', 'success');
-    } catch (err) {
-      showToast('ERRO AO DELETAR', 'error');
-    }
-  };
 
   const handleReorder = async () => {
     setLoading(true);
@@ -144,14 +134,6 @@ export default function GalleryManager({ initialImages }: { initialImages: any[]
                <p className="text-[8px] text-white/30 uppercase tracking-widest">{img.description || 'Sem descrição técnica'}</p>
             </div>
 
-            <div className="flex items-center gap-3 px-4">
-                <button 
-                  onClick={() => handleDelete(img.id)}
-                  className="p-3 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-lg shadow-red-500/10"
-                >
-                  <Trash2 size={16} />
-                </button>
-            </div>
           </Reorder.Item>
         ))}
       </Reorder.Group>
