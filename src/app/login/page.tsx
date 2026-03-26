@@ -45,45 +45,38 @@ export default function LoginPage() {
       return;
     }
 
-    // PERSISTÊNCIA REAL COM LOCALSTORAGE
+    // LOGIN REAL COM SUPABASE (API)
     try {
-      const existingUsers = JSON.parse(localStorage.getItem('dragao_pilotos') || '[]');
-      
-      // Procurar piloto
-      const pilot = existingUsers.find((u: any) => 
-        u.identificador.toLowerCase() === loginId && 
-        u.senha === formData.senha
-      );
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          identificador: formData.identificador,
+          senha: formData.senha
+        })
+      });
 
-      if (pilot) {
-        setToastMsg(`BEM-VINDO DE VOLTA, PILOTO ${pilot.nome.split(' ')[0].toUpperCase()}! ACESSO AO QG LIBERADO.`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setToastMsg(data.message);
         setToastType('success');
         setShowToast(true);
         setIsSubmitting(false);
         
-        // Redirecionamento para a Home/Operações
-        setTimeout(() => {
-          router.push('/');
-        }, 1500);
-        return;
-      }
+        // Salvar sessão básica
+        localStorage.setItem('dragao_user', JSON.stringify(data.user));
 
-      // Validação Básica para os outros pilotos
-      if (formData.senha.length < 4) {
-        setToastMsg('CÓDIGO DE SEGURANÇA INVÁLIDO. VERIFIQUE OS DADOS.');
+        // Redirecionamento 
+        setTimeout(() => {
+          router.push(data.user.role === 'ADMIN' ? '/admin' : '/');
+        }, 1500);
+      } else {
+        setToastMsg(data.message || 'ERRO NA AUTENTICAÇÃO.');
         setToastType('error');
         setShowToast(true);
         setIsSubmitting(false);
-        return;
       }
-
-      // Simulação de processamento para falha
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      setToastMsg('DADOS NÃO RECONHECIDOS PARA ESTE PILOTO. CADASTRE-SE!');
-      setToastType('error');
-      setShowToast(true);
-      setIsSubmitting(false);
     } catch (error) {
       setToastMsg('SISTEMA DE IDENTIFICAÇÃO OFFLINE. TENTE NOVAMENTE.');
       setToastType('error');

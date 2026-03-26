@@ -48,33 +48,27 @@ export default function RegistroPage() {
       return;
     }
 
-    // PERSISTÊNCIA REAL COM LOCALSTORAGE
+    // REGISTRO REAL COM SUPABASE (API)
     try {
-      const existingUsers = JSON.parse(localStorage.getItem('dragao_pilotos') || '[]');
-      
-      // Sanitização: Remover conta 'teste' se existir (como pedido pelo Ryan)
-      const sanitizedUsers = existingUsers.filter((u: any) => u.identificador.toLowerCase() !== 'teste');
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome: formData.nome,
+          identificador: formData.identificador,
+          senha: formData.senha
+        })
+      });
 
-      const userExists = sanitizedUsers.some((u: any) => u.identificador.toLowerCase() === formData.identificador.toLowerCase());
+      const data = await response.json();
 
-      if (userExists) {
-        setToastMsg('ERRO: ESTE PILOTO JÁ ESTÁ CADASTRADO NO QG!');
+      if (!response.ok) {
+        setToastMsg(data.message || 'ERRO AO AUTORIZAR ACESSO NO QG.');
         setToastType('error');
         setShowToast(true);
         setIsSubmitting(false);
         return;
       }
-
-      const newUser = {
-        nome: formData.nome,
-        identificador: formData.identificador,
-        senha: formData.senha
-      };
-
-      localStorage.setItem('dragao_pilotos', JSON.stringify([...sanitizedUsers, newUser]));
-
-      // Simulação de processamento visual
-      await new Promise(resolve => setTimeout(resolve, 1500));
 
       setToastMsg('CONTA CRIADA! PILOTO AUTORIZADO. SEU CUPOM DE 10% OFF FOI ATIVADO NO CATÁLOGO!');
       setToastType('success');
@@ -86,7 +80,7 @@ export default function RegistroPage() {
         router.push('/login');
       }, 2000);
     } catch (error) {
-      setToastMsg('ERRO CRÍTICO NO SISTEMA DE ARQUIVOS DO QG.');
+      setToastMsg('ERRO CRÍTICO NO SISTEMA DO QG. VERIFIQUE SUA CONEXÃO.');
       setToastType('error');
       setShowToast(true);
       setIsSubmitting(false);
