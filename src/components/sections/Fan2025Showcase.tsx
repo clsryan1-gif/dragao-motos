@@ -9,40 +9,51 @@ import { Settings, X } from 'lucide-react';
 export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdmin?: boolean }) {
   const [isEditing, setIsEditing] = useState(false);
 
-  const displayImages = dbImages && dbImages.length > 0 ? dbImages.map(img => ({
-    id: img.id,
-    src: img.url,
-    title: img.title || 'Mídia Dragão',
-    aspect: img.description || 'Alta Performance'
-  })) : [
+  const defaultImages = [
     {
+      id: 'static-0',
       src: '/images/galeria/fan2025_01.png',
       title: 'Comandos de Precisão',
       aspect: 'Aspecto: Aço Escovado e Controles Inteiros'
     },
     {
+      id: 'static-1',
       src: '/images/galeria/fan2025_02.png',
       title: 'Tanque & Cockpit',
       aspect: 'Aspecto: Brilho Metálico Intenso'
     },
     {
+      id: 'static-2',
       src: '/images/galeria/fan2025_03.jpg',
       title: 'Engenharia em Equipe',
       aspect: 'Aspecto: Ajuste Técnico de Elite'
     },
     {
+      id: 'static-3',
       src: '/images/galeria/fan2025_04.png',
       title: 'Estrutura Frontal',
       aspect: 'Aspecto: Geometria e Estabilidade'
     },
     {
+      id: 'static-4',
       src: '/images/galeria/fan2025_05.png',
       title: 'Finalização & Limpeza',
       aspect: 'Aspecto: Cromo Polido e Fundo Industrial'
     }
   ];
 
-  const images = displayImages;
+  const dbMapped: any[] = dbImages && dbImages.length > 0 ? dbImages.map(img => ({
+    id: img.id,
+    src: img.url,
+    title: img.title || 'Mítica Dragão',
+    aspect: img.description || 'Alta Performance'
+  })) : [];
+
+  // Cria a lista final garantindo 5 posições (prioridade para o que vem do banco)
+  const images = [...dbMapped];
+  for (let i = images.length; i < 5; i++) {
+    images.push(defaultImages[i]);
+  }
 
   return (
     <section id="galeria" className="py-20 md:py-32 px-6 md:px-12 bg-aco-escovado relative overflow-hidden text-center">
