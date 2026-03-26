@@ -8,6 +8,7 @@ import Link from 'next/link';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const [user, setUser] = React.useState<{ name: string; role: string } | null>(null);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -15,6 +16,23 @@ export function Navbar() {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.authenticated && data.user) {
+            setUser(data.user);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+    fetchUser();
   }, []);
 
   const navLinks = [
@@ -57,9 +75,19 @@ export function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-            <Link href="/login" className="text-sm font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors mr-4">
-              Entrar
-            </Link>
+            {user ? (
+              <Link href={user.role === 'ADMIN' ? '/admin' : '/perfil'} className="text-sm font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors mr-4 group">
+                {user.role === 'ADMIN' ? (
+                  <span className="text-neon-verde group-hover:glow-neon">QG ADMIN</span>
+                ) : (
+                  <span>{user.name.split(' ')[0]}</span>
+                )}
+              </Link>
+            ) : (
+              <Link href="/login" className="text-sm font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors mr-4">
+                Entrar
+              </Link>
+            )}
             <Link href="/agendamento" className="hidden md:block">
               <Button variant="neon" size="sm">
                 Agendar Agora
@@ -68,9 +96,22 @@ export function Navbar() {
         </div>
         
         {/* No mobile, o BottomNav substitui o menu hambúrguer */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-4">
+            {user ? (
+              <Link href={user.role === 'ADMIN' ? '/admin' : '/perfil'} className="text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white transition-colors group">
+                {user.role === 'ADMIN' ? (
+                  <span className="text-neon-verde group-hover:glow-neon">ADMIN</span>
+                ) : (
+                  <span>{user.name.split(' ')[0]}</span>
+                )}
+              </Link>
+            ) : (
+              <Link href="/login" className="text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white transition-colors">
+                Entrar
+              </Link>
+            )}
           <Link href="/agendamento">
-            <Button variant="neon" size="md" className="px-4 py-2 text-[12px]">
+            <Button variant="neon" size="md" className="px-3 py-1.5 text-[10px]">
               AGENDAR
             </Button>
           </Link>
