@@ -3,20 +3,23 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, Bike, Calendar, MessageSquare, Package, LogOut } from 'lucide-react';
+import { Home, Bike, Calendar, MessageSquare, Package, LogOut, ShoppingBag } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import { useCart } from '@/context/CartContext';
 
 const navItems = [
   { name: 'Início', href: '/', icon: Home },
   { name: 'Peças', href: '/produtos', icon: Package },
   { name: 'Galeria', href: '/galeria', icon: Bike },
-  { name: 'Agendar', href: '/agendamento', icon: Calendar },
+  { name: 'Radar', href: '/checkout', icon: ShoppingBag, isCart: true },
   { name: 'SOS', href: '/#sos', icon: MessageSquare, color: 'text-neon-verde' },
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
   const router = useRouter();
+  const { count } = useCart();
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
   React.useEffect(() => {
@@ -63,10 +66,20 @@ export function BottomNav() {
               className="flex flex-col items-center justify-center gap-1 w-full h-full group active:scale-95 transition-transform"
             >
               <div className={cn(
-                "p-1 rounded-lg transition-all duration-300",
+                "p-1 rounded-lg transition-all duration-300 relative", // Added 'relative' class
                 isActive ? "bg-neon-verde/10 text-neon-verde" : "text-white/40 group-hover:text-white/60"
               )}>
                 <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
+                
+                {/* Badge do Radar */}
+                {item.isCart && count > 0 && (
+                  <motion.div 
+                    initial={{ scale: 0 }} animate={{ scale: 1 }}
+                    className="absolute -top-1 -right-1 w-4 h-4 bg-neon-verde text-black text-[8px] font-black rounded-full flex items-center justify-center shadow-[0_0_8px_#00FF33]"
+                  >
+                    {count}
+                  </motion.div>
+                )}
               </div>
               <span className={cn(
                 "text-[10px] font-bold uppercase tracking-widest transition-colors",

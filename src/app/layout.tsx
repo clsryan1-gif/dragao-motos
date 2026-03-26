@@ -44,6 +44,7 @@ export const metadata: Metadata = {
 
 import { BottomNav } from "@/components/layout/BottomNav";
 import { ToastProvider } from "@/context/ToastContext";
+import { CartProvider } from "@/context/CartContext";
 import UnregisterSW from "@/components/pwa/UnregisterSW";
 import PWAInstall from "@/components/pwa/PWAInstall";
 import Script from "next/script";
@@ -60,36 +61,38 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-preto-profundo text-white font-sans pb-[env(safe-area-inset-bottom,4.5rem)] pt-[env(safe-area-inset-top,0px)] md:pb-0 overflow-x-hidden">
         <ToastProvider>
-          <UnregisterSW />
-          <PWAInstall />
-          <Script id="hide-nextjs-dev-pill" strategy="afterInteractive">
-            {`
-              (function() {
-                const css = '[id^="nextjs"], [class*="NextJS_"], #nextjs-dev-overlay, .__next-prerender-indicator, .nextjs-static-indicator, #__next-prerender-indicator { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }';
-                const head = document.head || document.getElementsByTagName('head')[0];
-                const style = document.createElement('style');
-                style.appendChild(document.createTextNode(css));
-                head.appendChild(style);
+          <CartProvider>
+            <UnregisterSW />
+            <PWAInstall />
+            <Script id="hide-nextjs-dev-pill" strategy="afterInteractive">
+              {`
+                (function() {
+                  const css = '[id^="nextjs"], [class*="NextJS_"], #nextjs-dev-overlay, .__next-prerender-indicator, .nextjs-static-indicator, #__next-prerender-indicator { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }';
+                  const head = document.head || document.getElementsByTagName('head')[0];
+                  const style = document.createElement('style');
+                  style.appendChild(document.createTextNode(css));
+                  head.appendChild(style);
 
-                // Função para monitorar mudanças e remover pilhas do Shadow DOM
-                const observer = new MutationObserver(() => {
-                  document.querySelectorAll('*').forEach(el => {
-                    if (el.shadowRoot && !el.shadowRoot.querySelector('#hide-next-shadow')) {
-                      const shadowStyle = document.createElement('style');
-                      shadowStyle.id = 'hide-next-shadow';
-                      shadowStyle.appendChild(document.createTextNode(css));
-                      el.shadowRoot.appendChild(shadowStyle);
-                    }
+                  // Função para monitorar mudanças e remover pilhas do Shadow DOM
+                  const observer = new MutationObserver(() => {
+                    document.querySelectorAll('*').forEach(el => {
+                      if (el.shadowRoot && !el.shadowRoot.querySelector('#hide-next-shadow')) {
+                        const shadowStyle = document.createElement('style');
+                        shadowStyle.id = 'hide-next-shadow';
+                        shadowStyle.appendChild(document.createTextNode(css));
+                        el.shadowRoot.appendChild(shadowStyle);
+                      }
+                    });
                   });
-                });
-                observer.observe(document.body, { childList: true, subtree: true });
-              })();
-            `}
-          </Script>
-          <main className="flex-grow page-enter">
-            {children}
-          </main>
-          <BottomNav />
+                  observer.observe(document.body, { childList: true, subtree: true });
+                })();
+              `}
+            </Script>
+            <main className="flex-grow page-enter">
+              {children}
+            </main>
+            <BottomNav />
+          </CartProvider>
         </ToastProvider>
       </body>
     </html>

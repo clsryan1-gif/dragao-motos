@@ -9,6 +9,7 @@ import { Footer } from '@/components/layout/Footer';
 import ProdutoListRow from '@/components/catalog/ProdutoListRow';
 import { ProductListSkeleton, CategorySkeleton } from '@/components/catalog/ProductSkeleton';
 import { Toast } from '@/components/ui/Toast';
+import { useCart } from '@/context/CartContext';
 
 // ===================================================
 // Tipagem e Helpers
@@ -72,12 +73,15 @@ export default function ProdutosPage() {
     });
   }, [busca, categoria, produtos]);
 
+  const { addToCart } = useCart();
+
   const onAdicionar = useCallback((p: Produto) => {
+    addToCart(p);
     setAddedItem(p.id);
-    setToastMsg(`${p.nome.toUpperCase()} ADICIONADO AO RADAR DE COMPRAS!`);
+    setToastMsg(`${p.nome.toUpperCase()} INCORPORADO AO RADAR OPERACIONAL!`);
     setShowToast(true);
     setTimeout(() => setAddedItem(null), 1500);
-  }, []);
+  }, [addToCart]);
 
   return (
     <div className="min-h-screen bg-preto-profundo text-white font-sans overflow-x-hidden relative">
