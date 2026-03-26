@@ -99,40 +99,40 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
     {
       id: 'static-0',
       src: '/images/galeria/fan2025_01.png',
-      title: 'Comandos de Precisão',
-      aspect: 'Aspecto: Aço Escovado e Controles Inteiros'
+      title: 'Motor OHC 160cc',
+      aspect: 'Calibragem: Torque de Precisão'
     },
     {
       id: 'static-1',
       src: '/images/galeria/fan2025_02.png',
-      title: 'Tanque & Cockpit',
-      aspect: 'Aspecto: Brilho Metálico Intenso'
+      title: 'Painel Digital Blackout',
+      aspect: 'Tecnologia: Monitoramento Industrial'
     },
     {
       id: 'static-2',
       src: '/images/galeria/fan2025_03.jpg',
-      title: 'Engenharia em Equipe',
-      aspect: 'Aspecto: Ajuste Técnico de Elite'
+      title: 'Estética Fan 2025',
+      aspect: 'Design: Linhas Agressivas e Fluidez'
     },
     {
       id: 'static-3',
       src: '/images/galeria/fan2025_04.png',
-      title: 'Estrutura Frontal',
-      aspect: 'Aspecto: Geometria e Estabilidade'
+      title: 'Geometria de Performance',
+      aspect: 'Equilíbrio: Estabilidade em Alta'
     },
     {
       id: 'static-4',
       src: '/images/galeria/fan2025_05.png',
-      title: 'Finalização & Limpeza',
-      aspect: 'Aspecto: Cromo Polido e Fundo Industrial'
+      title: 'Cromo e Finalização',
+      aspect: 'Estilo: Acabamento Premium Dragão'
     }
   ];
 
   const dbMapped: any[] = dbImages && dbImages.length > 0 ? dbImages.map(img => ({
     id: img.id,
     src: img.url,
-    title: img.title || 'Mítica Dragão',
-    aspect: img.description || 'Alta Performance'
+    title: img.title || 'Mídia Customizada Dragão',
+    aspect: img.description || 'Calibragem Técnica Superior'
   })) : [];
 
   // Cria a lista final garantindo 5 posições (prioridade para o que vem do banco)
