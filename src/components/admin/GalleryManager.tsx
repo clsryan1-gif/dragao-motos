@@ -48,7 +48,7 @@ export default function GalleryManager({ initialImages }: { initialImages: any[]
         .from('dragaomotos')
         .getPublicUrl(filePath);
 
-      await addGalleryImage(publicUrlData.publicUrl, 'Nova Imagem', 'Aspecto Industrial');
+      await addGalleryImage(publicUrlData.publicUrl, 'Mídia Dragão Motos', 'Performance de Elite');
       showToast('IMAGEM INCORPORADA COM SUCESSO!', 'success');
       window.location.reload(); // Refresh to get the new order
     } catch (err: any) {
