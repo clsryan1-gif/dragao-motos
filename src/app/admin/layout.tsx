@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Package, ShoppingCart, LayoutDashboard, Database, ChevronLeft, Terminal, Shield } from "lucide-react";
+import { Package, ShoppingCart, LayoutDashboard, Database, ChevronLeft, Terminal, Shield, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -25,10 +25,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         isOpen ? "w-full md:w-72" : "w-20"
       )}>
         <div className="flex flex-col gap-8 h-full">
-            <button onClick={handleLogout} className="flex items-center gap-2 text-neon-verde hover:glow-neon transition-all">
-                <ChevronLeft size={16} />
-                <span className={cn("text-[10px] font-black uppercase tracking-widest", !isOpen && "hidden")}>Sair do QG</span>
-            </button>
+            <Link href="/" className="flex items-center gap-2 text-white/40 hover:text-neon-verde transition-all group">
+                <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                <span className={cn("text-[10px] font-black uppercase tracking-widest", !isOpen && "hidden")}>Voltar para o Site</span>
+            </Link>
 
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-3">
@@ -46,7 +46,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                <NavLink href="/admin" icon={LayoutDashboard} label="Resumo Tático" active={pathname === '/admin'} isOpen={isOpen} />
                <NavLink href="/admin/produtos" icon={Package} label="Estoque de Peças" active={pathname.startsWith('/admin/produtos')} isOpen={isOpen} />
                <NavLink href="/admin/pedidos" icon={ShoppingCart} label="Vendas Live" active={pathname.startsWith('/admin/pedidos')} isOpen={isOpen} />
-               <NavLink href="/admin/galeria" icon={Database} label="Gestão de Galeria" active={pathname.startsWith('/admin/galeria')} isOpen={isOpen} />
+               <NavLink href="/admin/galeria" icon={LayoutGrid} label="Gestão de Galeria" active={pathname.startsWith('/admin/galeria')} isOpen={isOpen} />
             </nav>
 
             <div className="mt-auto pt-8 border-t border-white/5">
@@ -57,6 +57,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                        <span className="text-[7px] text-neon-verde uppercase font-bold">Autenticado ✔</span>
                     </div>
                 </div>
+
+                <button 
+                  onClick={handleLogout}
+                  className="mt-4 flex items-center gap-3 p-3 w-full rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all group"
+                >
+                  <Shield size={16} className="group-hover:rotate-12 transition-transform" />
+                  {isOpen && <span className="text-[9px] font-black uppercase tracking-widest">Encerrar Sessão</span>}
+                </button>
             </div>
         </div>
       </aside>
