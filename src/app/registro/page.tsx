@@ -2,124 +2,189 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { User, Mail, Lock, ChevronLeft, ShieldCheck, UserPlus } from 'lucide-react';
+import { User, Mail, Lock, ChevronLeft, ShieldCheck, UserPlus, Gift, Trophy, Star, Bell } from 'lucide-react';
 import Link from 'next/link';
+import { Toast } from '@/components/ui/Toast';
 
 export default function RegistroPage() {
+  const [showToast, setShowToast] = React.useState(false);
+  const [toastMsg, setToastMsg] = React.useState('');
+  const [toastType, setToastType] = React.useState<'success' | 'error'>('success');
+
+  const handleRegistro = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simulando sucesso persuasivo
+    setToastMsg('CONTA CRIADA! PILOTO AUTORIZADO. SEU CUPOM DE 10% OFF FOI ATIVADO NO CATÁLOGO!');
+    setToastType('success');
+    setShowToast(true);
+  };
+
   return (
     <div className="min-h-screen bg-preto-profundo flex items-center justify-center p-6 relative overflow-hidden">
       {/* Background Effects */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-verde/5 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-neon-verde/5 rounded-full blur-[140px] animate-pulse"></div>
         <div className="street-flow"></div>
       </div>
 
+      <Toast 
+        isVisible={showToast} 
+        message={toastMsg} 
+        type={toastType} 
+        onClose={() => setShowToast(false)} 
+      />
+
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-lg relative z-10"
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10"
       >
-        {/* Header/Back Link */}
-        <div className="mb-8 flex items-center justify-between">
-           <Link href="/login" className="inline-flex items-center gap-2 text-neon-verde text-[10px] font-black uppercase tracking-[0.3em] hover:translate-x-[-5px] transition-transform">
-             <ChevronLeft size={16} /> Voltar pro Login
-           </Link>
-           <div className="h-[1px] flex-1 mx-4 bg-white/5"></div>
-           <div className="text-white/20 text-[8px] font-black uppercase tracking-[0.4em]">REG_PROTOCOL_V.01</div>
+        {/* LADO ESQUERDO: PERSUASÃO E BENEFÍCIOS */}
+        <div className="lg:col-span-5 space-y-8">
+           <div className="space-y-4">
+              <motion.div
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="inline-block px-4 py-1 rounded-full bg-neon-verde/10 border border-neon-verde/30 text-neon-verde text-[10px] font-black uppercase tracking-[0.3em]"
+              >
+                Benefícios Exclusivos
+              </motion.div>
+              <h2 className="text-4xl md:text-6xl font-display font-black uppercase italic italic leading-none text-white tracking-tighter">
+                VENHA SER UM <br/><span className="text-neon-verde drop-shadow-[0_0_15px_rgba(0,255,51,0.5)]">PILOTO DE ELITE</span>
+              </h2>
+              <p className="text-white/40 text-xs font-medium leading-relaxed tracking-wider max-w-md">
+                Não é apenas um cadastro. É o seu passaporte para a melhor mecânica do Brasil. 
+                Sua moto merece tecnologia de ponta e cuidado especializado.
+              </p>
+           </div>
+
+           <div className="grid gap-6">
+              {[
+                { icon: Gift, title: '10% OFF NA PRIMEIRA MÃO', desc: 'Sua primeira manutenção completa com desconto imediato.' },
+                { icon: Trophy, title: 'ACESSO A PEÇAS RARAS', desc: 'Estoque exclusivo de peças que você não acha em lugar nenhum.' },
+                { icon: Star, title: 'RANKING DE PILOTOS', desc: 'Acumule pontos e troque por serviços e brindes oficiais.' },
+                { icon: Bell, title: 'RASTREAMENTO EM TEMPO REAL', desc: 'Acompanhe cada ajuste na sua moto direto pelo seu painel.' }
+              ].map((item, id) => (
+                <motion.div 
+                  key={id} 
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 + (id * 0.1) }}
+                  className="flex gap-4 group cursor-default"
+                >
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-aco-grad border-chrome flex items-center justify-center group-hover:border-neon-verde transition-colors shadow-chrome group-hover:shadow-neon">
+                     <item.icon className="text-white/40 group-hover:text-neon-verde transition-colors" size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-black uppercase tracking-widest text-white mb-1 group-hover:text-neon-verde transition-colors">{item.title}</h3>
+                    <p className="text-[10px] text-white/30 tracking-wider leading-relaxed">{item.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+           </div>
         </div>
 
-        {/* Title Section */}
-        <div className="mb-10">
-          <h1 className="text-5xl font-display font-black uppercase italic tracking-tighter text-metallic leading-none mb-2">
-            NOVO <span className="text-white">PILOTO</span>
-          </h1>
-          <div className="flex items-center gap-3">
-             <div className="h-[2px] w-8 bg-neon-verde"></div>
-             <p className="text-white/40 text-[10px] font-black uppercase tracking-widest">
-               Sincronize sua identidade com o <span className="text-neon-verde">QG</span>
-             </p>
-          </div>
-        </div>
+        {/* LADO DIREITO: FORMULÁRIO */}
+        <div className="lg:col-span-7">
+           <div className="bg-aco-grad border-chrome p-8 md:p-12 rounded-[3rem] relative overflow-hidden group shadow-2xl">
+              {/* Scanline effect */}
+              <div className="absolute top-0 left-0 w-full h-[2px] bg-neon-verde/20 animate-[scan_6s_linear_infinite] pointer-events-none"></div>
 
-        {/* Register Form */}
-        <div className="bg-aco-grad border-chrome p-8 rounded-[2.5rem] relative overflow-hidden group">
-          {/* Scanline effect */}
-          <div className="absolute top-0 left-0 w-full h-[2px] bg-neon-verde/20 animate-[scan_6s_linear_infinite] pointer-events-none"></div>
+              <div className="mb-10 flex items-center justify-between">
+                <div>
+                  <h1 className="text-3xl font-display font-black uppercase italic tracking-tighter text-metallic leading-none">
+                    REGISTRO <span className="text-white">OFICIAL</span>
+                  </h1>
+                </div>
+                <div className="px-3 py-1 bg-black/40 border border-white/5 rounded-lg text-white/20 text-[8px] font-black tracking-[0.4em]">DS-PROTO_02</div>
+              </div>
 
-          <form className="space-y-6 relative z-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Codinome / Nome</label>
-                  <div className="relative group/input">
-                    <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
-                    <input 
-                      type="text" 
-                      placeholder="NOME COMPLETO..."
-                      className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
-                    />
-                  </div>
+              <form onSubmit={handleRegistro} className="space-y-6 relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Codinome / Nome</label>
+                      <div className="relative group/input">
+                        <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
+                        <input 
+                          type="text" 
+                          required
+                          placeholder="SEU NOME COMPLETO..."
+                          className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Canal / Email</label>
+                      <div className="relative group/input">
+                        <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
+                        <input 
+                          type="email" 
+                          required
+                          placeholder="DIGITE SEU MELHOR EMAIL..."
+                          className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
+                        />
+                      </div>
+                    </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Canal / Email</label>
-                  <div className="relative group/input">
-                    <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
-                    <input 
-                      type="email" 
-                      placeholder="EMAIL@SISTEMA.COM..."
-                      className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
-                    />
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Código de Segurança</label>
+                      <div className="relative group/input">
+                        <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
+                        <input 
+                          type="password" 
+                          required
+                          placeholder="USE UMA SENHA FORTE..."
+                          className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Confirmar Código</label>
+                      <div className="relative group/input">
+                        <ShieldCheck size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
+                        <input 
+                          type="password" 
+                          required
+                          placeholder="REPETIR SUA SENHA..."
+                          className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
+                        />
+                      </div>
+                    </div>
                 </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Código de Segurança</label>
-                  <div className="relative group/input">
-                    <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
-                    <input 
-                      type="password" 
-                      placeholder="CRIAR SENHA..."
-                      className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
-                    />
-                  </div>
+                <div className="pt-4 flex items-start gap-4">
+                    <input type="checkbox" id="terms" className="mt-1 w-5 h-5 rounded border-white/10 bg-black/40 checked:bg-neon-verde accent-neon-verde cursor-pointer" required />
+                    <label htmlFor="terms" className="text-[9px] font-black uppercase tracking-widest text-white/30 leading-relaxed cursor-pointer hover:text-white/50 transition-colors">
+                      Eu aceito os <span className="text-neon-verde">protocolos de de segurança</span> e desejo receber o cupom de boas-vindas no meu perfil.
+                    </label>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Confirmar Código</label>
-                  <div className="relative group/input">
-                    <ShieldCheck size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
-                    <input 
-                      type="password" 
-                      placeholder="REPETIR SENHA..."
-                      className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
-                    />
-                  </div>
+                <button 
+                  type="submit"
+                  className="w-full bg-neon-verde py-5 rounded-2xl text-black font-display font-black uppercase italic text-2xl tracking-widest shadow-neon hover:shadow-neon-hover hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group/btn"
+                >
+                  AUTORIZAR MEU ACESSO
+                  <UserPlus size={28} className="group-hover:translate-x-1 group-hover:scale-110 transition-transform" />
+                </button>
+              </form>
+
+              <div className="mt-10 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
+                <Link href="/login" className="text-white/40 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2">
+                  <ChevronLeft size={14} /> Já tem acesso? Efetuar Login
+                </Link>
+                <div className="flex gap-4">
+                   <div className="w-10 h-1 md:w-16 bg-white/5 rounded-full relative overflow-hidden">
+                      <div className="absolute inset-0 bg-neon-verde w-1/3 animate-pulse"></div>
+                   </div>
                 </div>
-            </div>
-
-            <div className="pt-4 flex items-start gap-3">
-                <input type="checkbox" id="terms" className="mt-1 w-4 h-4 rounded border-white/10 bg-black/40 checked:bg-neon-verde accent-neon-verde" required />
-                <label htmlFor="terms" className="text-[9px] font-black uppercase tracking-widest text-white/30 leading-relaxed cursor-pointer hover:text-white/50 transition-colors">
-                  Eu concordo com os <span className="text-neon-verde">protocolos de segurança</span> e termos de uso da Dragão Motos.
-                </label>
-            </div>
-
-            <button 
-              type="submit"
-              className="w-full bg-black/40 border border-neon-verde/30 py-5 rounded-2xl text-neon-verde font-display font-black uppercase italic text-xl tracking-widest hover:bg-neon-verde hover:text-black hover:shadow-neon transition-all flex items-center justify-center gap-3 group/btn"
-            >
-              FINALIZAR CADASTRO
-              <UserPlus size={24} className="group-hover:scale-110 transition-transform" />
-            </button>
-          </form>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-8 text-center text-white/10 text-[7px] font-black uppercase tracking-[0.5em]">
-          PROTECTED BY CYBER-DRAGON FIREWALL • SECURE CONNECTION STRIKE
+              </div>
+           </div>
         </div>
       </motion.div>
     </div>

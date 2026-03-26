@@ -2,10 +2,23 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { User, Lock, ChevronRight, Zap, ShieldCheck } from 'lucide-react';
+import { User, Lock, ChevronRight, Zap, ShieldCheck, Sparkles } from 'lucide-react';
 import Link from 'next/link';
+import { Toast } from '@/components/ui/Toast';
 
 export default function LoginPage() {
+  const [showToast, setShowToast] = React.useState(false);
+  const [toastMsg, setToastMsg] = React.useState('');
+  const [toastType, setToastType] = React.useState<'success' | 'error'>('success');
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simulando erro para mostrar o feedback flutuante como auxílio
+    setToastMsg('DADOS NÃO RECONHECIDOS. VERIFIQUE SEUS CÓDIGOS DE ACESSO OU CADASTRE-SE!');
+    setToastType('error');
+    setShowToast(true);
+  };
+
   return (
     <div className="min-h-screen bg-preto-profundo flex items-center justify-center p-6 relative overflow-hidden">
       {/* Background Effects */}
@@ -13,6 +26,13 @@ export default function LoginPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-verde/5 rounded-full blur-[120px] animate-pulse"></div>
         <div className="street-flow"></div>
       </div>
+
+      <Toast 
+        isVisible={showToast} 
+        message={toastMsg} 
+        type={toastType} 
+        onClose={() => setShowToast(false)} 
+      />
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -40,18 +60,24 @@ export default function LoginPage() {
         </div>
 
         {/* Login Form */}
-        <div className="bg-aco-grad border-chrome p-8 rounded-[2.5rem] relative overflow-hidden group">
+        <div className="bg-aco-grad border-chrome p-8 rounded-[2.5rem] relative overflow-hidden group shadow-2xl">
           {/* Scanline effect mimic */}
           <div className="absolute top-0 left-0 w-full h-[2px] bg-neon-verde/30 animate-[scan_4s_linear_infinite] pointer-events-none"></div>
           
-          <form className="space-y-6 relative z-10">
+          <div className="mb-6 flex items-center gap-2 text-neon-verde/60">
+             <Sparkles size={14} />
+             <p className="text-[9px] font-black uppercase tracking-widest italic">Turbine sua moto agora</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-6 relative z-10">
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Piloto / Email</label>
               <div className="relative group/input">
                 <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                 <input 
                   type="email" 
-                  placeholder="DIGITE SEU EMAIL..."
+                  required
+                  placeholder="USE SEU EMAIL CADASTRADO..."
                   className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 focus:ring-1 focus:ring-neon-verde/20 transition-all placeholder:text-white/5"
                 />
               </div>
@@ -63,7 +89,8 @@ export default function LoginPage() {
                 <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                 <input 
                   type="password" 
-                  placeholder="••••••••"
+                  required
+                  placeholder="INSERIR CÓDIGO AGORA"
                   className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 focus:ring-1 focus:ring-neon-verde/20 transition-all placeholder:text-white/5"
                 />
               </div>
