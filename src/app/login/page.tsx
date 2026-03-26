@@ -14,7 +14,7 @@ export default function LoginPage() {
 
   // Form States
   const [formData, setFormData] = React.useState({
-    email: '',
+    identificador: '',
     senha: ''
   });
 
@@ -27,7 +27,17 @@ export default function LoginPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Validação Básica
+    // BYPASS ESPECIAL PARA O CHEFE (RYAN)
+    if (formData.identificador.toLowerCase() === 'ryan' && formData.senha === '1120') {
+      setToastMsg('ACESSO ADMIN AUTORIZADO! BEM-VINDO, RYAN.');
+      setToastType('success');
+      setShowToast(true);
+      setIsSubmitting(false);
+      // Aqui redirecionaria para o dashboard
+      return;
+    }
+
+    // Validação Básica para os outros pilotos
     if (formData.senha.length < 4) {
       setToastMsg('CÓDIGO DE SEGURANÇA INVÁLIDO. VERIFIQUE OS DADOS.');
       setToastType('error');
@@ -97,16 +107,16 @@ export default function LoginPage() {
 
           <form onSubmit={handleLogin} className="space-y-6 relative z-10">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Piloto / Email</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Piloto / Login</label>
               <div className="relative group/input">
                 <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                 <input 
                   type="text" 
-                  name="email"
-                  value={formData.email}
+                  name="identificador"
+                  value={formData.identificador}
                   onChange={handleInputChange}
                   required
-                  placeholder="USE SEU NOME OU EMAIL..."
+                  placeholder="USE SEU NOME OU LOGIN..."
                   className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 focus:ring-1 focus:ring-neon-verde/20 transition-all placeholder:text-white/5"
                 />
               </div>

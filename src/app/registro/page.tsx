@@ -4,9 +4,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock, ChevronLeft, ShieldCheck, UserPlus, Gift, Trophy, Star, Bell } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Toast } from '@/components/ui/Toast';
 
 export default function RegistroPage() {
+  const router = useRouter();
   const [showToast, setShowToast] = React.useState(false);
   const [toastMsg, setToastMsg] = React.useState('');
   const [toastType, setToastType] = React.useState<'success' | 'error'>('success');
@@ -15,7 +17,7 @@ export default function RegistroPage() {
   // Form States
   const [formData, setFormData] = React.useState({
     nome: '',
-    email: '',
+    identificador: '',
     senha: '',
     confirmarSenha: ''
   });
@@ -53,6 +55,11 @@ export default function RegistroPage() {
     setToastType('success');
     setShowToast(true);
     setIsSubmitting(false);
+
+    // Redirecionamento após 2 segundos
+    setTimeout(() => {
+      router.push('/login');
+    }, 2000);
   };
 
   return (
@@ -161,8 +168,8 @@ export default function RegistroPage() {
                         <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                         <input 
                           type="text" 
-                          name="email"
-                          value={formData.email}
+                          name="identificador"
+                          value={formData.identificador}
                           onChange={handleInputChange}
                           required
                           placeholder="DIGITE SEU EMAIL OU CANAL..."
