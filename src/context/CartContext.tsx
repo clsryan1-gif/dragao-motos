@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-type Produto = {
+export type Produto = {
   id: string;
   nome: string;
   preco: number;

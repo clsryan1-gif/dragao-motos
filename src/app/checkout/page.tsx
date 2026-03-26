@@ -7,7 +7,7 @@ import { Footer } from '@/components/layout/Footer';
 import { ChevronLeft, Zap, ShoppingBag, CreditCard, Banknote, ShieldCheck, QrCode } from 'lucide-react';
 import Link from 'next/link';
 import { formatCurrency } from '@/lib/utils';
-import { useCart } from '@/context/CartContext';
+import { useCart, Produto } from '@/context/CartContext';
 
 export default function CheckoutPage() {
   const { cart: cartItems, total, clearCart } = useCart();
@@ -18,7 +18,7 @@ export default function CheckoutPage() {
     if (!paymentMethod) return;
     setLoading(true);
     
-    const itemsList = cartItems.map((item: any) => `- ${item.nome} (x${item.qtd})`).join('\n');
+    const itemsList = cartItems.map((item: Produto) => `- ${item.nome} (x${item.qtd})`).join('\n');
     const message = encodeURIComponent(
       `🏁 *NOVA ORDEM DE COMPRA - DRAGÃO MOTOS*\n\n` +
       `📦 *ITENS NO RADAR:*\n${itemsList}\n\n` +
@@ -29,6 +29,7 @@ export default function CheckoutPage() {
     
     setTimeout(() => {
       window.open(`https://wa.me/558387426823?text=${message}`, '_blank');
+      clearCart();
       setLoading(false);
     }, 800);
   };
@@ -58,7 +59,7 @@ export default function CheckoutPage() {
               </div>
               
               <div className="space-y-6">
-                {cartItems.map((item: any) => (
+                {cartItems.map((item: Produto) => (
                   <div key={item.id} className="flex justify-between items-center group">
                     <div className="flex flex-col">
                       <span className="text-sm font-display font-black uppercase italic text-white group-hover:text-neon-verde transition-colors">{item.nome}</span>

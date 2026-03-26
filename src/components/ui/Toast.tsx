@@ -11,7 +11,7 @@ interface ToastProps {
   onClose: () => void;
 }
 
-export function Toast({ message, type = 'success', isVisible, onClose }: ToastProps) {
+export function StatusToast({ message, type = 'success', isVisible, onClose }: ToastProps) {
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
