@@ -7,6 +7,7 @@ import { addGalleryImage, deleteGalleryImage, updateGalleryOrder } from '../acti
 import { useToast } from '@/context/ToastContext';
 import { supabase, supabaseUrl, supabaseKey } from '@/lib/supabase';
 import { motion, Reorder } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 export default function GalleryManager({ initialImages }: { initialImages: any[] }) {
   const { showToast } = useToast();
