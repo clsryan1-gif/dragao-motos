@@ -6,6 +6,7 @@ import { ChevronLeft, Save, Zap, Package, Image as ImageIcon, Cpu, Database } fr
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useToast } from '@/context/ToastContext';
+import { supabase } from '@/lib/supabase';
 
 export default function NovoProdutoPage() {
   const router = useRouter();
@@ -20,17 +21,50 @@ export default function NovoProdutoPage() {
     imagem: '',
     ativo: true
   });
+  const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const selectedFile = e.target.files[0];
+      setFile(selectedFile);
+      setPreviewUrl(URL.createObjectURL(selectedFile));
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      let imageUrl = formData.imagem;
+
+      if (file) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+        const filePath = `peças/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('dragaomotos')
+          .upload(filePath, file);
+
+        if (uploadError) {
+          throw new Error('Erro no upload da imagem no Supabase');
+        }
+
+        const { data: publicUrlData } = supabase.storage
+          .from('dragaomotos')
+          .getPublicUrl(filePath);
+
+        imageUrl = publicUrlData.publicUrl;
+      }
+
       const res = await fetch('/api/admin/produtos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          imagem: imageUrl,
           preco: parseFloat(formData.preco),
           estoque: parseInt(formData.estoque),
         }),
@@ -69,14 +103,22 @@ export default function NovoProdutoPage() {
         {/* COLUNA PREVIEW (ESQUERDA) */}
         <div className="md:col-span-1 space-y-6">
            <div className="bg-aco-grad border-2 border-white/5 rounded-[2.5rem] p-6 aspect-square flex flex-col items-center justify-center relative overflow-hidden group">
-              {formData.imagem ? (
-                <img src={formData.imagem} alt="Preview" className="w-full h-full object-contain relative z-10 p-4" />
+              {previewUrl || formData.imagem ? (
+                <img src={previewUrl || formData.imagem} alt="Preview" className="w-full h-full object-contain relative z-10 p-4" />
               ) : (
                 <div className="flex flex-col items-center gap-4 text-white/10 group-hover:text-neon-verde/20 transition-colors">
                    <ImageIcon size={64} />
-                   <p className="text-[10px] font-black uppercase tracking-widest">Aguardando Imagem</p>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-center mt-2">Aguardando Imagem<br/>(Clique ou arraste)</p>
                 </div>
               )}
+              
+              {/* FILE INPUT INVISIVEL PARA COBRIR O CARD */}
+              <input 
+                 type="file" 
+                 accept="image/*"
+                 onChange={handleFileChange}
+                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30" 
+              />
               
               {/* SCANNER LINE (SURPRESA) */}
               <div className="absolute inset-0 pointer-events-none z-20">
@@ -110,7 +152,7 @@ export default function NovoProdutoPage() {
               <Input label="VALOR DE MERCADO (R$)" placeholder="0.00" type="number" step="0.01" value={formData.preco} onChange={(v: string) => setFormData({...formData, preco: v})} required />
               <Input label="ESTOQUE INICIAL (UN)" placeholder="10" type="number" value={formData.estoque} onChange={(v: string) => setFormData({...formData, estoque: v})} required />
               <div className="md:col-span-2">
-                 <Input label="LINK DA IMAGEM (CDN/URL)" placeholder="https://exemplo.com/imagem.png" value={formData.imagem} onChange={(v: string) => setFormData({...formData, imagem: v})} />
+                 <Input label="LINK DA IMAGEM (CDN/URL) *Opcional se fez upload*" placeholder="https://exemplo.com/imagem.png" value={formData.imagem} onChange={(v: string) => setFormData({...formData, imagem: v})} />
               </div>
            </div>
 

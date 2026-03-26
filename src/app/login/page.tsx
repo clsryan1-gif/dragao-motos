@@ -137,7 +137,7 @@ export default function LoginPage() {
 
             <form onSubmit={handleLogin} className="space-y-4 relative z-10">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Piloto / Login</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">WhatsApp de Acesso</label>
                 <div className="relative group/input">
                   <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                   <input 
@@ -146,7 +146,7 @@ export default function LoginPage() {
                     value={formData.identificador}
                     onChange={handleInputChange}
                     required
-                    placeholder="USE SEU NOME OU LOGIN..."
+                    placeholder="SEU WHATSAPP (EX: 11999999999)"
                     className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 focus:ring-1 focus:ring-neon-verde/20 transition-all placeholder:text-white/5"
                   />
                 </div>

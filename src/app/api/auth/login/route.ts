@@ -26,9 +26,18 @@ export async function POST(req: Request) {
       });
     }
 
-    // Buscar no banco pelo email
-    const user = await prisma.user.findUnique({
-      where: { email: loginId }
+    // Criar o formato virtual do WhatsApp
+    const waNumber = identificador.replace(/\D/g, '');
+    const dummyEmail = waNumber ? `wa_${waNumber}@dragao.com` : loginId;
+
+    // Buscar no banco pelo email virtual ou email legado
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: dummyEmail },
+          { email: loginId }
+        ]
+      }
     });
 
     if (!user) {

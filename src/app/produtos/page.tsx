@@ -135,39 +135,7 @@ export default function ProdutosPage() {
             </div>
         </header>
 
-        {/* BANNER PERSUASIVO DE PRIMEIRA COMPRA */}
-        <motion.section 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mb-12 relative group"
-        >
-          <div className="absolute -inset-1 bg-gradient-to-r from-neon-verde/20 to-transparent rounded-3xl blur-md opacity-50 group-hover:opacity-100 transition-opacity"></div>
-          <div className="relative bg-aco-grad border-chrome p-6 md:p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden">
-             {/* Decorative element */}
-             <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                <Gift size={120} />
-             </div>
-             
-             <div className="flex items-center gap-6">
-                <div className="w-16 h-16 rounded-2xl bg-neon-verde/10 border border-neon-verde/30 flex items-center justify-center shadow-neon">
-                   <Sparkles className="text-neon-verde" size={32} />
-                </div>
-                <div>
-                   <h2 className="text-2xl md:text-3xl font-display font-black uppercase italic tracking-tighter text-white">
-                      BEM-VINDO AO <span className="text-neon-verde">ARSENAL DRAGÃO</span>
-                   </h2>
-                   <p className="text-white/40 text-[10px] md:text-xs font-bold uppercase tracking-widest">
-                      PRIMEIRA VEZ NO QG? USE O CUPOM <span className="text-neon-verde bg-neon-verde/10 px-2 py-0.5 rounded border border-neon-verde/20">DRAGAO10</span> PARA 10% OFF!
-                   </p>
-                </div>
-             </div>
 
-             <Link href="/registro" className="w-full md:w-auto px-10 py-4 bg-neon-verde text-black font-display font-black uppercase italic text-lg tracking-widest rounded-xl shadow-neon hover:shadow-neon-hover hover:scale-105 active:scale-95 transition-all text-center">
-                RESGATAR MEU CUPOM
-             </Link>
-          </div>
-        </motion.section>
 
         {/* FILTROS POR CATEGORIA */}
         <section className="mb-8">

@@ -14,10 +14,9 @@ export default function RegistroPage() {
   const [toastType, setToastType] = React.useState<'success' | 'error'>('success');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  // Form States
   const [formData, setFormData] = React.useState({
     nome: '',
-    identificador: '',
+    identificador: '', // Will store the WhatsApp number
     senha: '',
     confirmarSenha: ''
   });
@@ -31,7 +30,15 @@ export default function RegistroPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Validação de Segurança
+    const telefoneLimpo = formData.identificador.replace(/\D/g, '');
+    if (telefoneLimpo.length < 10) {
+      setToastMsg('ERRO: NÚMERO DE WHATSAPP INVÁLIDO. INSIRA O DDD E O NÚMERO.');
+      setToastType('error');
+      setShowToast(true);
+      setIsSubmitting(false);
+      return;
+    }
+
     if (formData.senha.length < 4) {
       setToastMsg('ERRO: CÓDIGO DE SEGURANÇA MUITO CURTO. MÍNIMO 4 DÍGITOS.');
       setToastType('error');
@@ -70,7 +77,7 @@ export default function RegistroPage() {
         return;
       }
 
-      setToastMsg('CONTA CRIADA! PILOTO AUTORIZADO. SEU CUPOM DE 10% OFF FOI ATIVADO NO CATÁLOGO!');
+      setToastMsg('CONTA CRIADA! PILOTO AUTORIZADO A ENTRAR NO QG!');
       setToastType('success');
       setShowToast(true);
       setIsSubmitting(false);
@@ -129,7 +136,6 @@ export default function RegistroPage() {
 
            <div className="grid gap-4">
               {[
-                { icon: Gift, title: '10% OFF NA PRIMEIRA MÃO', desc: 'Sua primeira manutenção personalizada.' },
                 { icon: Trophy, title: 'ACESSO A PEÇAS RARAS', desc: 'Estoque exclusivo de itens premium.' },
                 { icon: Star, title: 'RANKING DE PILOTOS', desc: 'Pontue e troque por brindes oficiais.' },
                 { icon: Bell, title: 'RASTREAMENTO REAL', desc: 'Acompanhe cada ajuste na sua moto.' }
@@ -210,16 +216,16 @@ export default function RegistroPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">Canal / Email</label>
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 ml-1">WhatsApp</label>
                       <div className="relative group/input">
-                        <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
+                        <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                         <input 
-                          type="text" 
+                          type="tel" 
                           name="identificador"
                           value={formData.identificador}
                           onChange={handleInputChange}
                           required
-                          placeholder="DIGITE SEU EMAIL OU CANAL..."
+                          placeholder="SEU WHATSAPP COM DDD..."
                           className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
                         />
                       </div>
@@ -263,7 +269,7 @@ export default function RegistroPage() {
                 <div className="pt-4 flex items-start gap-4">
                     <input type="checkbox" id="terms" className="mt-1 w-5 h-5 rounded border-white/10 bg-black/40 checked:bg-neon-verde accent-neon-verde cursor-pointer" required />
                     <label htmlFor="terms" className="text-[9px] font-black uppercase tracking-widest text-white/30 leading-relaxed cursor-pointer hover:text-white/50 transition-colors">
-                      Eu aceito os <span className="text-neon-verde">protocolos de de segurança</span> e desejo receber o cupom de boas-vindas no meu perfil.
+                      Eu aceito os <span className="text-neon-verde">protocolos de segurança</span> e desejo aderir ao sistema oficial.
                     </label>
                 </div>
 

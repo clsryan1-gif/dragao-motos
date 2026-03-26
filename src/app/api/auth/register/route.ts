@@ -14,11 +14,14 @@ export async function POST(req: Request) {
       );
     }
 
+    const waNumber = identificador.replace(/\D/g, '');
+    const dummyEmail = `wa_${waNumber}@dragao.com`;
+
     // Verificar se o usuário já existe
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
-          { email: identificador.toLowerCase() },
+          { email: dummyEmail },
           { name: nome }
         ]
       }
@@ -39,7 +42,8 @@ export async function POST(req: Request) {
     const user = await prisma.user.create({
       data: {
         name: nome,
-        email: identificador.toLowerCase(),
+        email: dummyEmail,
+        phone: waNumber,
         password: hashedPassword,
         role: "USER"
       }
