@@ -10,13 +10,49 @@ export default function RegistroPage() {
   const [showToast, setShowToast] = React.useState(false);
   const [toastMsg, setToastMsg] = React.useState('');
   const [toastType, setToastType] = React.useState<'success' | 'error'>('success');
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const handleRegistro = (e: React.FormEvent) => {
+  // Form States
+  const [formData, setFormData] = React.useState({
+    nome: '',
+    email: '',
+    senha: '',
+    confirmarSenha: ''
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleRegistro = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulando sucesso persuasivo
+    setIsSubmitting(true);
+
+    // Validação de Segurança
+    if (formData.senha.length < 4) {
+      setToastMsg('ERRO: CÓDIGO DE SEGURANÇA MUITO CURTO. MÍNIMO 4 DÍGITOS.');
+      setToastType('error');
+      setShowToast(true);
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (formData.senha !== formData.confirmarSenha) {
+      setToastMsg('ERRO: OS CÓDIGOS DE SEGURANÇA NÃO COINCIDEM.');
+      setToastType('error');
+      setShowToast(true);
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Simulação de processamento
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
     setToastMsg('CONTA CRIADA! PILOTO AUTORIZADO. SEU CUPOM DE 10% OFF FOI ATIVADO NO CATÁLOGO!');
     setToastType('success');
     setShowToast(true);
+    setIsSubmitting(false);
   };
 
   return (
@@ -109,6 +145,9 @@ export default function RegistroPage() {
                         <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                         <input 
                           type="text" 
+                          name="nome"
+                          value={formData.nome}
+                          onChange={handleInputChange}
                           required
                           placeholder="SEU NOME COMPLETO..."
                           className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
@@ -122,6 +161,9 @@ export default function RegistroPage() {
                         <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                         <input 
                           type="email" 
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
                           required
                           placeholder="DIGITE SEU MELHOR EMAIL..."
                           className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
@@ -137,8 +179,11 @@ export default function RegistroPage() {
                         <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                         <input 
                           type="password" 
+                          name="senha"
+                          value={formData.senha}
+                          onChange={handleInputChange}
                           required
-                          placeholder="USE UMA SENHA FORTE..."
+                          placeholder="MÍNIMO 4 DÍGITOS..."
                           className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
                         />
                       </div>
@@ -150,6 +195,9 @@ export default function RegistroPage() {
                         <ShieldCheck size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                         <input 
                           type="password" 
+                          name="confirmarSenha"
+                          value={formData.confirmarSenha}
+                          onChange={handleInputChange}
                           required
                           placeholder="REPETIR SUA SENHA..."
                           className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
@@ -167,10 +215,20 @@ export default function RegistroPage() {
 
                 <button 
                   type="submit"
-                  className="w-full bg-neon-verde py-5 rounded-2xl text-black font-display font-black uppercase italic text-2xl tracking-widest shadow-neon hover:shadow-neon-hover hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group/btn"
+                  disabled={isSubmitting}
+                  className="w-full bg-neon-verde py-5 rounded-2xl text-black font-display font-black uppercase italic text-2xl tracking-widest shadow-neon hover:shadow-neon-hover hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group/btn disabled:opacity-50 disabled:cursor-wait"
                 >
-                  AUTORIZAR MEU ACESSO
-                  <UserPlus size={28} className="group-hover:translate-x-1 group-hover:scale-110 transition-transform" />
+                  {isSubmitting ? (
+                    <div className="flex items-center gap-3">
+                       <div className="w-5 h-5 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
+                       SINCROZINANDO...
+                    </div>
+                  ) : (
+                    <>
+                      AUTORIZAR MEU ACESSO
+                      <UserPlus size={28} className="group-hover:translate-x-1 group-hover:scale-110 transition-transform" />
+                    </>
+                  )}
                 </button>
               </form>
 

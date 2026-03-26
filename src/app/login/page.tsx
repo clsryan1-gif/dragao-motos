@@ -10,13 +10,39 @@ export default function LoginPage() {
   const [showToast, setShowToast] = React.useState(false);
   const [toastMsg, setToastMsg] = React.useState('');
   const [toastType, setToastType] = React.useState<'success' | 'error'>('success');
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Form States
+  const [formData, setFormData] = React.useState({
+    email: '',
+    senha: ''
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulando erro para mostrar o feedback flutuante como auxílio
-    setToastMsg('DADOS NÃO RECONHECIDOS. VERIFIQUE SEUS CÓDIGOS DE ACESSO OU CADASTRE-SE!');
+    setIsSubmitting(true);
+
+    // Validação Básica
+    if (formData.senha.length < 4) {
+      setToastMsg('CÓDIGO DE SEGURANÇA INVÁLIDO. VERIFIQUE OS DADOS.');
+      setToastType('error');
+      setShowToast(true);
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Simulação de processamento
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    setToastMsg('DADOS NÃO RECONHECIDOS PARA ESTE PILOTO. CADASTRE-SE!');
     setToastType('error');
     setShowToast(true);
+    setIsSubmitting(false);
   };
 
   return (
@@ -76,6 +102,9 @@ export default function LoginPage() {
                 <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                 <input 
                   type="email" 
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                   required
                   placeholder="USE SEU EMAIL CADASTRADO..."
                   className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 focus:ring-1 focus:ring-neon-verde/20 transition-all placeholder:text-white/5"
@@ -89,6 +118,9 @@ export default function LoginPage() {
                 <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                 <input 
                   type="password" 
+                  name="senha"
+                  value={formData.senha}
+                  onChange={handleInputChange}
                   required
                   placeholder="INSERIR CÓDIGO AGORA"
                   className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 focus:ring-1 focus:ring-neon-verde/20 transition-all placeholder:text-white/5"
@@ -106,10 +138,20 @@ export default function LoginPage() {
 
             <button 
               type="submit"
-              className="w-full bg-neon-verde py-5 rounded-2xl text-black font-display font-black uppercase italic text-xl tracking-widest shadow-neon hover:shadow-neon-hover hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group/btn"
+              disabled={isSubmitting}
+              className="w-full bg-neon-verde py-5 rounded-2xl text-black font-display font-black uppercase italic text-xl tracking-widest shadow-neon hover:shadow-neon-hover hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group/btn disabled:opacity-50 disabled:cursor-wait"
             >
-              INICIAR SISTEMAS
-              <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
+              {isSubmitting ? (
+                <div className="flex items-center gap-3">
+                   <div className="w-5 h-5 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
+                   AUTENTICANDO...
+                </div>
+              ) : (
+                <>
+                  INICIAR SISTEMAS
+                  <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
             </button>
           </form>
         </div>
