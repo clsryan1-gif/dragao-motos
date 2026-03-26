@@ -159,29 +159,28 @@ export default function RegistroPage() {
            </div>
 
            {/* RETORNAR AO LOGIN (LATERAL) */}
-           <motion.div
-             initial={{ x: -30, opacity: 0 }}
-             animate={{ x: 0, opacity: 1 }}
-             transition={{ delay: 0.8 }}
-             className="mt-8 p-6 bg-aco-grad border-chrome/30 rounded-2xl relative overflow-hidden group hover:border-neon-verde/30 transition-all shadow-xl"
-           >
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-white/30 text-[8px] font-black uppercase tracking-widest mb-1">JÁ POSSUI ACESSO AO QG?</p>
-                  <h3 className="text-xl font-display font-black uppercase italic text-white leading-none group-hover:text-neon-verde transition-colors">EFETUAR LOGIN</h3>
+           <Link href="/login" className="block outline-none">
+             <motion.div
+               initial={{ x: -30, opacity: 0 }}
+               animate={{ x: 0, opacity: 1 }}
+               transition={{ delay: 0.8 }}
+               className="mt-8 p-6 bg-aco-grad border-chrome/30 rounded-2xl relative overflow-hidden group hover:border-neon-verde/30 transition-all shadow-xl cursor-pointer"
+             >
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-white/30 text-[8px] font-black uppercase tracking-widest mb-1">JÁ POSSUI ACESSO AO QG?</p>
+                    <h3 className="text-xl font-display font-black uppercase italic text-white leading-none group-hover:text-neon-verde transition-colors">EFETUAR LOGIN</h3>
+                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-neon-verde/10 border border-neon-verde/20 flex items-center justify-center text-neon-verde group-hover:bg-neon-verde group-hover:text-black transition-all shadow-neon">
+                    <ChevronLeft size={24} />
+                  </div>
                 </div>
-                <Link 
-                  href="/login" 
-                  className="w-12 h-12 rounded-xl bg-neon-verde/10 border border-neon-verde/20 flex items-center justify-center text-neon-verde group-hover:bg-neon-verde group-hover:text-black transition-all shadow-neon"
-                >
-                  <ChevronLeft size={24} />
-                </Link>
-              </div>
-              
-              <div className="absolute bottom-0 right-0 p-1 opacity-5">
-                 <ShieldCheck size={40} />
-              </div>
-           </motion.div>
+                
+                <div className="absolute bottom-0 right-0 p-1 opacity-5">
+                   <ShieldCheck size={40} />
+                </div>
+             </motion.div>
+           </Link>
         </div>
 
         {/* LADO DIREITO: FORMULÁRIO */}

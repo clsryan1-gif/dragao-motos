@@ -197,36 +197,35 @@ export default function LoginPage() {
 
         {/* LATERAL CHAMATIVA: CADASTRO */}
         <div className="lg:col-span-2 h-full flex flex-col justify-center">
-          <motion.div
-            initial={{ x: 30, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="bg-aco-grad border-chrome p-8 rounded-[2rem] relative overflow-hidden group shadow-2xl text-center flex flex-col items-center gap-4 hover:border-neon-verde/50 transition-all cursor-pointer"
-          >
-            <div className="absolute top-0 left-0 w-full h-full bg-neon-verde/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            
-            <p className="text-white/40 text-[11px] font-black uppercase tracking-[0.3em]">
-              NOVO NA OFICINA?
-            </p>
-            
-            <h2 className="text-3xl font-display font-black uppercase italic leading-none text-white tracking-tighter transition-all group-hover:glow-neon group-hover:text-neon-verde">
-              CADASTRAR <br/>NOVO PILOTO
-            </h2>
-            
-            <div className="w-12 h-1 bg-neon-verde/30 rounded-full group-hover:w-20 group-hover:bg-neon-verde transition-all"></div>
-            
-            <Link 
-              href="/registro" 
-              className="mt-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-[10px] font-black uppercase tracking-widest hover:bg-neon-verde hover:text-black transition-all flex items-center gap-2 group/btn2"
+          <Link href="/registro" className="block outline-none">
+            <motion.div
+              initial={{ x: 30, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="bg-aco-grad border-chrome p-8 rounded-[2rem] relative overflow-hidden group shadow-2xl text-center flex flex-col items-center gap-4 hover:border-neon-verde/50 transition-all cursor-pointer"
             >
-              CRIAR CONTA AGORA
-              <ChevronRight size={14} className="group-hover/btn2:translate-x-1 transition-transform" />
-            </Link>
+              <div className="absolute top-0 left-0 w-full h-full bg-neon-verde/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              
+              <p className="text-white/40 text-[11px] font-black uppercase tracking-[0.3em]">
+                NOVO NA OFICINA?
+              </p>
+              
+              <h2 className="text-3xl font-display font-black uppercase italic leading-none text-white tracking-tighter transition-all group-hover:glow-neon group-hover:text-neon-verde">
+                CADASTRAR <br/>NOVO PILOTO
+              </h2>
+              
+              <div className="w-12 h-1 bg-neon-verde/30 rounded-full group-hover:w-20 group-hover:bg-neon-verde transition-all"></div>
+              
+              <div className="mt-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-[10px] font-black uppercase tracking-widest group-hover:bg-neon-verde group-hover:text-black transition-all flex items-center gap-2 group/btn2">
+                CRIAR CONTA AGORA
+                <ChevronRight size={14} className="group-hover/btn2:translate-x-1 transition-transform" />
+              </div>
 
-            <div className="absolute -bottom-4 -right-4 opacity-5 group-hover:opacity-10 transition-opacity">
-               <Zap size={80} />
-            </div>
-          </motion.div>
+              <div className="absolute -bottom-4 -right-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                 <Zap size={80} />
+              </div>
+            </motion.div>
+          </Link>
 
           <div className="mt-8 flex items-center justify-center gap-2 text-white/20 text-[8px] font-black uppercase tracking-[0.4em]">
             <ShieldCheck size={12} />
