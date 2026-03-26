@@ -160,12 +160,12 @@ export default function RegistroPage() {
                       <div className="relative group/input">
                         <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-neon-verde transition-colors" />
                         <input 
-                          type="email" 
+                          type="text" 
                           name="email"
                           value={formData.email}
                           onChange={handleInputChange}
                           required
-                          placeholder="DIGITE SEU MELHOR EMAIL..."
+                          placeholder="DIGITE SEU EMAIL OU CANAL..."
                           className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-neon-verde/50 transition-all placeholder:text-white/5"
                         />
                       </div>
