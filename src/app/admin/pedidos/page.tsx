@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { ShoppingCart, Wallet, Clock, CheckCircle2, ChevronLeft, Package, User } from "lucide-react";
 import Link from "next/link";
 import OrderListAdmin from "@/components/catalog/OrderListAdmin";
+import { cn } from "@/lib/utils";
 
 export const dynamic = 'force-dynamic';
 
@@ -67,5 +68,3 @@ function StatusMiniCard({ label, value, color }: any) {
   );
 }
 
-// Obs: cn missing here too, I'll need to add it or use a simpler pattern
-import { cn } from "@/lib/utils";

@@ -135,23 +135,9 @@ export default async function CaixaPage() {
           </div>
         </div>
 
-        {/* FORMULÁRIO DE LANÇAMENTO (BOTÃO COM VIDA!) */}
+        {/* FORMULÁRIO DE LANÇAMENTO */}
         <div className="space-y-6">
            <CaixaForm />
-
-           <div className="bg-black/40 border border-white/5 p-6 rounded-[2rem] flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/30">
-                 <Receipt size={20} />
-              </div>
-              <p className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em] leading-relaxed">
-                 * Todos os lançamentos são auditados e gravados permanentemente no registro de atividades.
-              </p>
-           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
            <div className="bg-black/40 border border-white/5 p-6 rounded-[2rem] flex items-center gap-4">
               <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/30">
