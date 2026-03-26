@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminProdutos() {
   const produtos = await prisma.product.findMany({
+    take: 100, // Prevenção extrema (Limita os últimos 100 itens)
     orderBy: { createdAt: 'desc' }
   });
 

@@ -10,6 +10,7 @@ const BRL = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', curren
 export default async function AdminPedidos() {
   const pedidos = await prisma.order.findMany({
     where: { hidden: false },
+    take: 100, // Prevenção contra estouro de memória (gargalo)
     orderBy: { createdAt: 'desc' },
     include: {
       user: { select: { name: true, phone: true } },
@@ -17,9 +18,9 @@ export default async function AdminPedidos() {
     }
   });
 
-  const pagos = pedidos.filter(p => p.status === 'PAGO');
-  const totalFaturado = pagos.reduce((acc, p) => acc + p.total, 0);
-  const pendentes = pedidos.filter(p => p.status === 'PENDENTE');
+  const pagos = pedidos.filter((p: any) => p.status === 'PAGO');
+  const totalFaturado = pagos.reduce((acc: number, p: any) => acc + p.total, 0);
+  const pendentes = pedidos.filter((p: any) => p.status === 'PENDENTE');
 
   return (
     <div className="space-y-8 animate-[fadeIn_0.5s_ease-out] pb-20">

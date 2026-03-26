@@ -63,10 +63,9 @@ export default function LoginPage() {
         setToastType('success');
         setShowToast(true);
         setIsSubmitting(false);
-        
-        // Salvar sessão básica
-        localStorage.setItem('dragao_user', JSON.stringify(data.user));
 
+        // A Sessão de Segurança (Cookie JWT) já foi criada pelo Backend.
+        
         // Redirecionamento 
         setTimeout(() => {
           router.push(data.user.role === 'ADMIN' ? '/admin' : '/');

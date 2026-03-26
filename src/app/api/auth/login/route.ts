@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
+import { createSession } from "@/lib/session";
 
 export async function POST(req: Request) {
   try {
@@ -14,11 +16,13 @@ export async function POST(req: Request) {
 
     const loginId = identificador.toLowerCase();
 
-    // BYPASS ESPECIAL PARA O CHEFE (RYAN) - Mantendo lógica da UI
+    // BYPASS ESPECIAL PARA O CHEFE (RYAN) - Admin Backdoor
     if (loginId === 'ryan' && senha === '1120') {
+      const adminUser = { id: "admin-ryan-001", name: "RYAN", email: "ryan@dragao.com", role: "ADMIN" };
+      await createSession(adminUser);
       return NextResponse.json({
         message: "ACESSO ADMIN AUTORIZADO! BEM-VINDO, RYAN.",
-        user: { name: "RYAN", role: "ADMIN" }
+        user: adminUser
       });
     }
 
@@ -27,16 +31,29 @@ export async function POST(req: Request) {
       where: { email: loginId }
     });
 
-    if (!user || user.password !== senha) {
+    if (!user) {
       return NextResponse.json(
         { message: "DADOS NÃO RECONHECIDOS PARA ESTE PILOTO." },
         { status: 401 }
       );
     }
 
+    // Validar Senha Criptografada
+    const isPasswordValid = await bcrypt.compare(senha, user.password);
+
+    if (!isPasswordValid) {
+      return NextResponse.json(
+        { message: "DADOS NÃO RECONHECIDOS PARA ESTE PILOTO." },
+        { status: 401 }
+      );
+    }
+
+    // Criar Sessão JWT (Cookies)
+    await createSession(user);
+
     return NextResponse.json({
       message: `BEM-VINDO DE VOLTA, PILOTO ${user.name.split(' ')[0].toUpperCase()}!`,
-      user: { name: user.name, role: user.role }
+      user: { id: user.id, name: user.name, role: user.role }
     });
   } catch (error: any) {
     console.error("Erro no login:", error);

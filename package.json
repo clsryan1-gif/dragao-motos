@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "@prisma/client": "6.2.1",
+    "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
     "is-extglob": "^2.1.1",
+    "jose": "^6.2.2",
     "lucide-react": "^1.6.0",
     "next": "16.2.1",
     "prisma": "6.2.1",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^3.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
