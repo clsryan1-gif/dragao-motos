@@ -23,6 +23,7 @@ export default function NovoProdutoPage() {
   });
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [debugError, setDebugError] = useState<any>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -60,7 +61,8 @@ export default function NovoProdutoPage() {
 
         if (uploadError) {
           console.error('Upload Error:', uploadError);
-          throw new Error('Falha no upload para o Supabase');
+          setDebugError(uploadError);
+          throw new Error(`FALHA NO UPLOAD: ${uploadError.message}`);
         }
 
         const { data: publicUrlData } = supabase.storage
@@ -186,6 +188,43 @@ export default function NovoProdutoPage() {
         </div>
 
       </form>
+
+      {/* JANELA DE DIAGNÓSTICO FLUTUANTE */}
+      {debugError && (
+        <motion.div 
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="fixed bottom-6 right-6 left-6 md:left-auto md:w-96 bg-black/90 border border-red-500/50 p-6 rounded-3xl backdrop-blur-xl z-50 shadow-[0_0_50px_rgba(239,68,68,0.2)]"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2 text-red-500">
+              <Database size={16} />
+              <span className="text-[10px] font-black uppercase tracking-widest">Diagnóstico Supabase</span>
+            </div>
+            <button onClick={() => setDebugError(null)} className="text-white/20 hover:text-white transition-colors">
+              <Zap size={14} />
+            </button>
+          </div>
+          <div className="space-y-3 font-mono">
+            <div className="bg-red-500/5 p-3 rounded-xl border border-red-500/10">
+              <p className="text-[10px] text-red-400 font-bold uppercase mb-1">Error Message:</p>
+              <p className="text-[11px] text-white/80 break-words">{debugError.message || 'Erro desconhecido'}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-white/5 p-3 rounded-xl border border-white/10">
+                <p className="text-[8px] text-white/30 font-bold uppercase mb-1">Status Code:</p>
+                <p className="text-[11px] text-white font-black">{debugError.status || 'N/A'}</p>
+              </div>
+              <div className="bg-white/5 p-3 rounded-xl border border-white/10">
+                <p className="text-[11px] text-white font-black">{debugError.error || 'N/A'}</p>
+              </div>
+            </div>
+            <p className="text-[8px] text-white/20 uppercase tracking-widest text-center pt-2">
+              * Verifique se o bucket 'dragaomotos' existe e tem acesso público.
+            </p>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }
