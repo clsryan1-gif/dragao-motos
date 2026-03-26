@@ -6,14 +6,20 @@
     "dev": "next dev --webpack --port 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "6.2.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
     "is-extglob": "^2.1.1",
     "lucide-react": "^1.6.0",
     "next": "16.2.1",
+    "prisma": "6.2.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "tailwind-merge": "^3.5.0"
@@ -26,6 +32,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "webpack": "^5.105.4",
     "webpack-cli": "^7.0.2"
