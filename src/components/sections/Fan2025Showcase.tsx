@@ -1,11 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { FadeIn } from '@/components/ui/FadeIn';
+import GalleryManager from '@/components/admin/GalleryManager';
+import { Settings, X } from 'lucide-react';
 
-export function Fan2025Showcase({ dbImages }: { dbImages?: any[] }) {
+export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdmin?: boolean }) {
+  const [isEditing, setIsEditing] = useState(false);
+
   const displayImages = dbImages && dbImages.length > 0 ? dbImages.map(img => ({
+    id: img.id,
     src: img.url,
     title: img.title || 'Mídia Dragão',
     aspect: img.description || 'Alta Performance'
@@ -37,9 +42,32 @@ export function Fan2025Showcase({ dbImages }: { dbImages?: any[] }) {
     }
   ];
 
-  const images = displayImages; // Use the computed list
+  const images = displayImages;
+
   return (
     <section id="galeria" className="py-20 md:py-32 px-6 md:px-12 bg-aco-escovado relative overflow-hidden text-center">
+      
+      {/* BOTÃO DE CONTROLE ADMIN INLINE */}
+      {isAdmin && (
+        <div className="fixed bottom-12 right-12 z-[100]">
+          <button 
+            onClick={() => setIsEditing(!isEditing)}
+            className="flex items-center gap-3 bg-neon-verde text-black px-8 py-5 rounded-full font-display font-black uppercase italic tracking-widest shadow-neon hover:scale-110 active:scale-95 transition-all outline-none border-none ring-4 ring-black/20"
+          >
+            {isEditing ? <X size={20} /> : <Settings size={20} className="animate-spin-slow" />}
+            {isEditing ? 'Fechar Gestão' : 'Gerenciar Galeria'}
+          </button>
+        </div>
+      )}
+
+      {/* MODAL DE GESTÃO NATIVA */}
+      {isAdmin && isEditing && (
+        <div className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[90] overflow-y-auto pt-32 pb-20 px-6">
+           <div className="max-w-4xl mx-auto">
+              <GalleryManager initialImages={dbImages || []} />
+           </div>
+        </div>
+      )}
       {/* Luzes de Estúdio Metálicas */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-white/5 blur-[150px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-neon-verde/5 blur-[150px] pointer-events-none" />

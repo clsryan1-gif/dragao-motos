@@ -5,8 +5,26 @@ import { Fan2025Showcase } from '@/components/sections/Fan2025Showcase';
 import { FadeIn } from '@/components/ui/FadeIn';
 
 import { prisma } from '@/lib/prisma';
+import { cookies } from 'next/headers';
+import { jwtVerify } from 'jose';
+
+const secretKey = process.env.JWT_SECRET || "dragao_motos_super_secret_key_2026";
+const key = new TextEncoder().encode(secretKey);
 
 export default async function GaleriaPage() {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("dragao_session")?.value;
+  let isAdmin = false;
+
+  if (sessionToken) {
+    try {
+      const { payload } = await jwtVerify(sessionToken, key, { algorithms: ["HS256"] });
+      isAdmin = payload.role === 'ADMIN';
+    } catch (e) {
+      // Ignora erro de JWT, usuário comum
+    }
+  }
+
   const images = await prisma.gallery.findMany({
     orderBy: { order: 'asc' }
   });
@@ -24,7 +42,7 @@ export default async function GaleriaPage() {
           </p>
         </FadeIn>
       </div>
-      <Fan2025Showcase dbImages={JSON.parse(JSON.stringify(images))} />
+      <Fan2025Showcase dbImages={JSON.parse(JSON.stringify(images))} isAdmin={isAdmin} />
       <Footer />
     </main>
   );

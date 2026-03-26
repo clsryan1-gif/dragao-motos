@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Plus, Trash2, ArrowUp, ArrowDown, Zap, Image as ImageIcon, Database, Save } from "lucide-react";
-import { addGalleryImage, deleteGalleryImage, updateGalleryOrder } from '../actions';
+import { addGalleryImage, deleteGalleryImage, updateGalleryOrder } from '@/app/admin/actions';
 import { useToast } from '@/context/ToastContext';
 import { supabase, supabaseUrl, supabaseKey } from '@/lib/supabase';
 import { motion, Reorder } from 'framer-motion';

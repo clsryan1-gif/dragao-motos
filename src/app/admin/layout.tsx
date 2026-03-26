@@ -46,7 +46,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                <NavLink href="/admin" icon={LayoutDashboard} label="Resumo Tático" active={pathname === '/admin'} isOpen={isOpen} />
                <NavLink href="/admin/produtos" icon={Package} label="Estoque de Peças" active={pathname.startsWith('/admin/produtos')} isOpen={isOpen} />
                <NavLink href="/admin/pedidos" icon={ShoppingCart} label="Vendas Live" active={pathname.startsWith('/admin/pedidos')} isOpen={isOpen} />
-               <NavLink href="/admin/galeria" icon={LayoutGrid} label="Gestão de Galeria" active={pathname.startsWith('/admin/galeria')} isOpen={isOpen} />
+               <NavLink href="/galeria" icon={LayoutGrid} label="Gestão de Galeria" active={pathname === '/galeria'} isOpen={isOpen} />
             </nav>
 
             <div className="mt-auto pt-8 border-t border-white/5">
