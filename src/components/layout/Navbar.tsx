@@ -5,11 +5,14 @@ import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
-import { LogOut } from 'lucide-react';
+import { LogOut, ShoppingBag } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useCart } from '@/context/CartContext';
+import { motion } from 'framer-motion';
 
 export function Navbar() {
   const router = useRouter();
+  const { count } = useCart();
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [user, setUser] = React.useState<{ name: string; role: string } | null>(null);
 
@@ -51,12 +54,6 @@ export function Navbar() {
     }
   };
 
-import { useCart } from '@/context/CartContext';
-import { ShoppingBag } from 'lucide-react';
-
-// ... inside component ...
-  const { count } = useCart();
-
   const navLinks = [
     { name: 'Início', href: '/' },
     { name: 'Peças', href: '/produtos' },
@@ -88,10 +85,8 @@ import { ShoppingBag } from 'lucide-react';
         </div>
 
         {/* Desktop Menu */}
-import { motion } from 'framer-motion';
-
-// ... inside loop ...
-          {navLinks.map((link: any) => (
+        <div className="hidden md:flex items-center gap-8 text-sm font-sans font-bold uppercase tracking-widest text-white/70">
+          {navLinks.map((link) => (
             <Link key={link.name} href={link.href} className="hover:text-neon-verde transition-colors flex items-center gap-2 relative group">
               {link.isRadar && (
                 <div className="relative">
@@ -112,6 +107,7 @@ import { motion } from 'framer-motion';
               )}
             </Link>
           ))}
+        </div>
 
         <div className="hidden md:flex items-center gap-4">
             {user ? (
