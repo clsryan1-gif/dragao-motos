@@ -27,11 +27,10 @@ export default function CheckoutPage() {
       `Aguardando autorização técnica para prosseguir!`
     );
     
-    setTimeout(() => {
-      window.open(`https://wa.me/558387426823?text=${message}`, '_blank');
-      clearCart();
-      setLoading(false);
-    }, 800);
+    // REDIRECIONAMENTO IMEDIATO: Browsers bloqueiam window.open se estiver dentro de setTimeout/Async não-direto
+    window.open(`https://wa.me/558387426823?text=${message}`, '_blank');
+    clearCart();
+    setLoading(false);
   };
 
   return (

@@ -51,12 +51,18 @@ export function Navbar() {
     }
   };
 
+import { useCart } from '@/context/CartContext';
+import { ShoppingBag } from 'lucide-react';
+
+// ... inside component ...
+  const { count } = useCart();
+
   const navLinks = [
     { name: 'Início', href: '/' },
     { name: 'Peças', href: '/produtos' },
+    { name: 'Radar', href: '/checkout', isRadar: true },
     { name: 'Serviços', href: '/servicos' },
     { name: 'Galeria', href: '/galeria' },
-    { name: 'FAQ', href: '/#faq' },
   ];
 
   return (
@@ -82,13 +88,30 @@ export function Navbar() {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-sans font-bold uppercase tracking-widest text-white/70">
-          {navLinks.map((link) => (
-            <Link key={link.name} href={link.href} className="hover:text-neon-verde transition-colors">
+import { motion } from 'framer-motion';
+
+// ... inside loop ...
+          {navLinks.map((link: any) => (
+            <Link key={link.name} href={link.href} className="hover:text-neon-verde transition-colors flex items-center gap-2 relative group">
+              {link.isRadar && (
+                <div className="relative">
+                   <ShoppingBag size={16} className="text-neon-verde" />
+                   {count > 0 && (
+                     <motion.div 
+                        initial={{ scale: 0 }} animate={{ scale: 1 }}
+                        className="absolute -top-2 -right-2 bg-neon-verde text-black text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-neon font-sans"
+                     >
+                       {count}
+                     </motion.div>
+                   )}
+                </div>
+              )}
               {link.name}
+              {link.isRadar && count > 0 && (
+                <div className="absolute -bottom-1 left-0 w-full h-[1px] bg-neon-verde shadow-neon" />
+              )}
             </Link>
           ))}
-        </div>
 
         <div className="hidden md:flex items-center gap-4">
             {user ? (
