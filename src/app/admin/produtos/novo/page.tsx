@@ -39,7 +39,7 @@ export default function NovoProdutoPage() {
     const isSupabaseConfigured = !supabaseUrl.includes('placeholder') && !supabaseKey.includes('placeholder');
 
     if (file && !isSupabaseConfigured) {
-      showToast('ERRO: SUPABASE NÃO CONFIGURADO NO .ENV', 'error');
+      showToast('ERRO: CONFIGURE AS CHAVES NO ARQUIVO .ENV PARA UPLOAD!', 'error');
       return;
     }
 
