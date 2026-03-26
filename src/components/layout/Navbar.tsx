@@ -19,10 +19,10 @@ export function Navbar() {
 
   const navLinks = [
     { name: 'Início', href: '/' },
+    { name: 'Peças', href: '/produtos' },
     { name: 'Serviços', href: '/servicos' },
     { name: 'Galeria', href: '/galeria' },
     { name: 'FAQ', href: '/#faq' },
-    { name: 'SOS', href: '/#sos' },
   ];
 
   return (
@@ -57,6 +57,9 @@ export function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
+            <Link href="/login" className="text-sm font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors mr-4">
+              Entrar
+            </Link>
             <Link href="/agendamento" className="hidden md:block">
               <Button variant="neon" size="sm">
                 Agendar Agora
