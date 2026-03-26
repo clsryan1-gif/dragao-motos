@@ -42,3 +42,33 @@ export async function toggleAdmin(userId: string, currentRole: string) {
   });
   revalidatePath('/admin/usuarios');
 }
+
+export async function addGalleryImage(url: string, title?: string, description?: string) {
+  const lastImage = await prisma.gallery.findFirst({
+    orderBy: { order: 'desc' }
+  });
+  const order = lastImage ? lastImage.order + 1 : 0;
+
+  await prisma.gallery.create({
+    data: { url, title, description, order }
+  });
+  revalidatePath('/admin/galeria');
+  revalidatePath('/galeria');
+}
+
+export async function deleteGalleryImage(id: string) {
+  await prisma.gallery.delete({ where: { id } });
+  revalidatePath('/admin/galeria');
+  revalidatePath('/galeria');
+}
+
+export async function updateGalleryOrder(items: { id: string, order: number }[]) {
+  for (const item of items) {
+    await prisma.gallery.update({
+      where: { id: item.id },
+      data: { order: item.order }
+    });
+  }
+  revalidatePath('/admin/galeria');
+  revalidatePath('/galeria');
+}

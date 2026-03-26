@@ -4,7 +4,13 @@ import { Footer } from '@/components/layout/Footer';
 import { Fan2025Showcase } from '@/components/sections/Fan2025Showcase';
 import { FadeIn } from '@/components/ui/FadeIn';
 
-export default function GaleriaPage() {
+import { prisma } from '@/lib/prisma';
+
+export default async function GaleriaPage() {
+  const images = await prisma.gallery.findMany({
+    orderBy: { order: 'asc' }
+  });
+
   return (
     <main className="min-h-screen bg-preto-profundo text-white pt-24 md:pt-32">
       <Navbar />
@@ -18,7 +24,7 @@ export default function GaleriaPage() {
           </p>
         </FadeIn>
       </div>
-      <Fan2025Showcase />
+      <Fan2025Showcase dbImages={JSON.parse(JSON.stringify(images))} />
       <Footer />
     </main>
   );

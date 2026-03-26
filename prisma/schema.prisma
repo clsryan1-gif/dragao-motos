@@ -63,12 +63,21 @@ model OrderItem {
 }
 
 model Financeiro {
-  id        String   @id @default(uuid())
-  tipo      String
-  valor     Float
+  id        String   @id @default(cuid())
   descricao String
+  valor     Float
+  tipo      String   // ENTRADA ou SAIDA
   categoria String
   data      DateTime @default(now())
+}
+
+model Gallery {
+  id          String   @id @default(cuid())
+  url         String
+  title       String?
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
 }
 
 model ActivityLog {

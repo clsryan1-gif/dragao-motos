@@ -4,35 +4,40 @@ import React from 'react';
 import Image from 'next/image';
 import { FadeIn } from '@/components/ui/FadeIn';
 
-const images = [
-  {
-    src: '/images/galeria/fan2025_01.png',
-    title: 'Comandos de Precisão',
-    aspect: 'Aspecto: Aço Escovado e Controles Inteiros'
-  },
-  {
-    src: '/images/galeria/fan2025_02.png',
-    title: 'Tanque & Cockpit',
-    aspect: 'Aspecto: Brilho Metálico Intenso'
-  },
-  {
-    src: '/images/galeria/fan2025_03.jpg',
-    title: 'Engenharia em Equipe',
-    aspect: 'Aspecto: Ajuste Técnico de Elite'
-  },
-  {
-    src: '/images/galeria/fan2025_04.png',
-    title: 'Estrutura Frontal',
-    aspect: 'Aspecto: Geometria e Estabilidade'
-  },
-  {
-    src: '/images/galeria/fan2025_05.png',
-    title: 'Finalização & Limpeza',
-    aspect: 'Aspecto: Cromo Polido e Fundo Industrial'
-  }
-];
+export function Fan2025Showcase({ dbImages }: { dbImages?: any[] }) {
+  const displayImages = dbImages && dbImages.length > 0 ? dbImages.map(img => ({
+    src: img.url,
+    title: img.title || 'Mídia Dragão',
+    aspect: img.description || 'Alta Performance'
+  })) : [
+    {
+      src: '/images/galeria/fan2025_01.png',
+      title: 'Comandos de Precisão',
+      aspect: 'Aspecto: Aço Escovado e Controles Inteiros'
+    },
+    {
+      src: '/images/galeria/fan2025_02.png',
+      title: 'Tanque & Cockpit',
+      aspect: 'Aspecto: Brilho Metálico Intenso'
+    },
+    {
+      src: '/images/galeria/fan2025_03.jpg',
+      title: 'Engenharia em Equipe',
+      aspect: 'Aspecto: Ajuste Técnico de Elite'
+    },
+    {
+      src: '/images/galeria/fan2025_04.png',
+      title: 'Estrutura Frontal',
+      aspect: 'Aspecto: Geometria e Estabilidade'
+    },
+    {
+      src: '/images/galeria/fan2025_05.png',
+      title: 'Finalização & Limpeza',
+      aspect: 'Aspecto: Cromo Polido e Fundo Industrial'
+    }
+  ];
 
-export function Fan2025Showcase() {
+  const images = displayImages; // Use the computed list
   return (
     <section id="galeria" className="py-20 md:py-32 px-6 md:px-12 bg-aco-escovado relative overflow-hidden text-center">
       {/* Luzes de Estúdio Metálicas */}
