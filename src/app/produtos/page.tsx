@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import ProdutoCard from '@/components/catalog/ProdutoCard';
-import { ProductSkeleton, CategorySkeleton } from '@/components/catalog/ProductSkeleton';
+import ProdutoListRow from '@/components/catalog/ProdutoListRow';
+import { ProductListSkeleton, CategorySkeleton } from '@/components/catalog/ProductSkeleton';
 import { Toast } from '@/components/ui/Toast';
 
 // ===================================================
@@ -163,45 +163,45 @@ export default function ProdutosPage() {
            )}
         </section>
 
-        {/* GRID DE PRODUTOS */}
+        {/* LISTA DE PRODUTOS INDUSTRIAL */}
         <AnimatePresence mode="wait">
            {loading ? (
              <motion.div 
                key="loading"
                variants={containerVariants} initial="hidden" animate="show"
-               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6"
+               className="flex flex-col gap-2"
              >
-                {[1,2,3,4,5,6,7,8].map(i => <ProductSkeleton key={i} />)}
+                {[1,2,3,4,5].map(i => <ProductListSkeleton key={i} />)}
              </motion.div>
            ) : filtrados.length === 0 ? (
              <motion.div 
                key="empty"
                initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-               className="py-32 flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-[3rem]"
+               className="py-32 flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-[4rem] bg-black/20"
              >
-                <div className="relative mb-6">
-                   <Hexagon size={64} className="text-white/10" />
-                   <Terminal size={32} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-neon-verde opacity-20" />
+                <div className="relative mb-8">
+                   <Hexagon size={80} className="text-white/5" />
+                   <Terminal size={40} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-neon-verde opacity-30" />
                 </div>
-                <h3 className="text-xl font-display font-black uppercase italic tracking-widest text-white/50 mb-2">Sem Resultados no Radar</h3>
-                <p className="text-white/20 text-xs font-black uppercase tracking-widest text-center max-w-xs">
-                  A peça que você busca não foi encontrada. Tente usar outros termos ou limpe o filtro.
+                <h3 className="text-2xl font-display font-black uppercase italic tracking-[0.2em] text-white/40 mb-3">Sinal de Radar Perdido</h3>
+                <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.3em] text-center max-w-sm">
+                  Nenhum componente mecânico detectado com esses parâmetros. Redefina seus sensores de busca.
                 </p>
                 <button 
                   onClick={() => { setBusca(''); setCategoria('Todas'); }}
-                  className="mt-8 text-neon-verde font-black uppercase tracking-[0.3em] text-[10px] hover:glow-neon transition-all"
+                  className="mt-10 bg-white/5 border border-white/10 hover:border-neon-verde/40 hover:bg-neon-verde/5 px-10 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] text-neon-verde transition-all shadow-neon-hover"
                 >
-                  Reinicializar Sensores
+                  REINICIALIZAR SENSORES
                 </button>
              </motion.div>
            ) : (
              <motion.div 
-               key="grid"
+               key="list"
                variants={containerVariants} initial="hidden" animate="show"
-               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6"
+               className="flex flex-col"
              >
                 {filtrados.map(p => (
-                  <ProdutoCard 
+                  <ProdutoListRow 
                     key={p.id} 
                     produto={p} 
                     isAdded={addedItem === p.id}
