@@ -100,10 +100,10 @@ export default function ProdutosPage() {
           <div className="absolute inset-0 bg-[url('/images/grid-bg.png')] opacity-10 bg-repeat bg-[length:50px_50px]"></div>
       </div>
 
-      <main className="relative z-10 pt-24 md:pt-32 pb-20 px-6 md:px-12 max-w-7xl mx-auto">
+      <main className="relative z-10 pt-20 md:pt-24 pb-16 px-6 md:px-12 max-w-7xl mx-auto">
         
         {/* HEADER DO CATÁLOGO */}
-        <header className="mb-8">
+        <header className="mb-4">
             <Link href="/" className="inline-flex items-center gap-2 text-neon-verde text-xs font-black uppercase tracking-[0.3em] mb-6 hover:translate-x-[-5px] transition-transform">
                 <ChevronLeft size={16} /> Voltar pro QG
             </Link>
@@ -111,7 +111,7 @@ export default function ProdutosPage() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div>
                    <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                      <h1 className="text-5xl md:text-8xl font-display font-black uppercase italic tracking-tighter leading-none mb-4">
+                      <h1 className="text-4xl md:text-6xl font-display font-black uppercase italic tracking-tighter leading-none mb-3">
                         PEÇAS <span className="text-neon-verde drop-shadow-[0_0_20px_#00FF33]">ORIGINAIS</span>
                       </h1>
                       <div className="flex items-center gap-3">

@@ -31,13 +31,13 @@ const ProdutoListRow = React.memo(({ produto, isAdded, onAdicionar, BRL }: Produ
   return (
     <motion.div 
       variants={rowVariants}
-      className="bg-aco-grad border-chrome rounded-[1.5rem] overflow-hidden flex flex-col md:flex-row hover:border-neon-verde transition-all duration-500 group relative shadow-xl isolate mb-3"
+      className="bg-aco-grad border-chrome rounded-[1.5rem] overflow-hidden flex flex-col md:flex-row hover:border-neon-verde transition-all duration-500 group relative shadow-xl isolate mb-2"
     >
       {/* Laser Scanner Effect */}
       <div className="absolute inset-y-0 left-0 w-[2px] bg-neon-verde shadow-[0_0_15px_#00FF33] z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity animate-pulse"></div>
 
       {/* Image Block - Reduced Size */}
-      <div className="w-full md:w-40 h-32 md:h-auto bg-black/40 relative overflow-hidden group/img shrink-0 border-b md:border-b-0 md:border-r border-white/5">
+      <div className="w-full md:w-32 h-32 md:h-auto bg-black/40 relative overflow-hidden group/img shrink-0 border-b md:border-b-0 md:border-r border-white/5">
         <Link href={`/produtos/${produto.id}`} className="block h-full w-full">
            {produto.imagem ? (
              <img 
@@ -57,7 +57,7 @@ const ProdutoListRow = React.memo(({ produto, isAdded, onAdicionar, BRL }: Produ
       </div>
 
       {/* Info Block - Denser Layout */}
-      <div className="flex-1 p-4 md:px-8 md:py-3 flex flex-col md:flex-row gap-4 items-start md:items-center">
+      <div className="flex-1 p-3 md:px-8 md:py-2.5 flex flex-col md:flex-row gap-4 items-start md:items-center">
          <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
                <span className="text-[7px] font-black uppercase text-neon-verde/60 tracking-tighter bg-neon-verde/5 px-1.5 py-0.5 rounded border border-neon-verde/10">
@@ -89,7 +89,7 @@ const ProdutoListRow = React.memo(({ produto, isAdded, onAdicionar, BRL }: Produ
               whileTap={produto.estoque > 0 ? { scale: 0.95 } : {}}
               onClick={() => produto.estoque > 0 && onAdicionar(produto)}
               disabled={produto.estoque <= 0}
-              className={`flex items-center justify-center w-10 h-10 md:w-auto md:px-6 md:h-12 rounded-xl transition-all shadow-neon-hover border-2 ${
+              className={`flex items-center justify-center w-10 h-10 md:w-auto md:px-5 md:h-10 rounded-xl transition-all shadow-neon-hover border-2 ${
                 isAdded ? 'bg-neon-verde border-white text-black' : 
                 produto.estoque > 0 ? 'bg-black border-neon-verde text-neon-verde hover:bg-neon-verde hover:text-black shadow-neon' : 
                 'bg-zinc-900 border-zinc-800 text-zinc-700 cursor-not-allowed'

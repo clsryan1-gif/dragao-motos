@@ -46,29 +46,29 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-preto-profundo text-white font-sans selection:bg-neon-verde selection:text-black">
       <Navbar />
       
-      <main className="relative z-10 pt-28 pb-32 px-6 max-w-5xl mx-auto">
-        <header className="mb-12">
-          <Link href="/produtos" className="inline-flex items-center gap-2 text-white/40 hover:text-neon-verde text-xs font-black uppercase tracking-[0.3em] mb-6 transition-all group">
+      <main className="relative z-10 pt-16 pb-20 px-6 max-w-5xl mx-auto">
+        <header className="mb-6">
+          <Link href="/produtos" className="inline-flex items-center gap-2 text-white/40 hover:text-neon-verde text-[10px] font-black uppercase tracking-[0.3em] mb-2 transition-all group">
             <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Retornar ao Catálogo
           </Link>
-          <h1 className="text-4xl md:text-7xl font-display font-black uppercase italic tracking-tighter leading-none">
+          <h1 className="text-3xl md:text-5xl font-display font-black uppercase italic tracking-tighter leading-none">
             FINALIZAR <span className="text-neon-verde drop-shadow-[0_0_15px_#00FF33]">ORDEM</span>
           </h1>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Resumo da Ordem */}
-          <div className="lg:col-span-7 space-y-8">
-            <section className="bg-aco-grad border-chrome p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+          <div className="lg:col-span-7 space-y-4">
+            <section className="bg-aco-grad border-chrome p-6 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-neon-verde/5 blur-3xl pointer-events-none" />
-              <div className="flex items-center gap-3 mb-8">
+              <div className="flex items-center gap-3 mb-6">
                 <ShoppingBag size={20} className="text-neon-verde" />
-                <h2 className="text-lg font-display font-black uppercase italic tracking-widest">Resumo do Radar</h2>
+                <h2 className="text-base font-display font-black uppercase italic tracking-widest">Resumo do Radar</h2>
               </div>
               
-              <div className="space-y-6">
+              <div className="space-y-3">
                 {cartItems.map((item: Produto) => (
-                  <div key={item.id} className="flex justify-between items-center group bg-white/[0.02] p-4 rounded-2xl border border-white/5 hover:border-neon-verde/30 transition-all">
+                  <div key={item.id} className="flex justify-between items-center group bg-white/[0.02] p-3 rounded-2xl border border-white/5 hover:border-neon-verde/30 transition-all">
                     <div className="flex flex-col gap-1">
                       <span className="text-sm font-display font-black uppercase italic text-white group-hover:text-neon-verde transition-colors line-clamp-1">{item.nome}</span>
                       <div className="flex items-center gap-3">
@@ -136,16 +136,16 @@ export default function CheckoutPage() {
                   <button
                     key={method.id}
                     onClick={() => setPaymentMethod(method.id as any)}
-                    className={`p-6 rounded-[2rem] border-2 transition-all flex items-center gap-5 text-left group relative ornament-border ${
+                    className={`p-4 rounded-[2rem] border-2 transition-all flex items-center gap-4 text-left group relative ornament-border ${
                       paymentMethod === method.id 
                       ? 'bg-neon-verde border-white text-black shadow-neon' 
                       : 'bg-aco-grad border-chrome text-white hover:border-neon-verde/50'
                     }`}
                   >
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
                       paymentMethod === method.id ? 'bg-black text-neon-verde' : 'bg-white/5 text-neon-verde'
                     }`}>
-                       <method.icon size={24} />
+                       <method.icon size={20} />
                     </div>
                     <div className="flex-1">
                       <p className="text-xs font-display font-black uppercase italic tracking-widest leading-none mb-1">{method.label}</p>
@@ -167,13 +167,13 @@ export default function CheckoutPage() {
               <button 
                 onClick={handleFinish}
                 disabled={!paymentMethod || loading}
-                className={`w-full py-6 rounded-[2rem] font-display font-black uppercase italic text-sm tracking-[0.3em] transition-all flex items-center justify-center gap-4 ${
+                className={`w-full py-4 rounded-[2rem] font-display font-black uppercase italic text-sm tracking-[0.3em] transition-all flex items-center justify-center gap-4 ${
                   paymentMethod 
                   ? 'bg-neon-verde text-black shadow-neon hover:scale-[1.02] active:scale-95' 
                   : 'bg-white/5 border border-white/10 text-white/20 cursor-not-allowed'
                 }`}
               >
-                {loading ? <Zap size={24} className="animate-spin-slow" /> : <Zap size={24} />}
+                {loading ? <Zap size={20} className="animate-spin-slow" /> : <Zap size={20} />}
                 {loading ? 'MODULANDO SINAL...' : 'CONFIRMAR NO WHATSAPP'}
               </button>
             </section>
