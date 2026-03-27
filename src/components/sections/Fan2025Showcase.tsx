@@ -10,7 +10,7 @@ import { supabase, supabaseUrl, supabaseKey } from '@/lib/supabase';
 import { deleteGalleryImage, updateGalleryImage } from '@/app/admin/actions';
 import { DiagnosticOverlay } from '@/components/ui/DiagnosticOverlay';
 import { cn } from '@/lib/utils';
-import { Edit3, Check, Save, Type } from 'lucide-react';
+import { Edit3, Check, Save, Type, Pencil } from 'lucide-react';
 
 const PHRASE_SETS = [
   { t: 'Lanterna High-Intensity', a: 'Estética: Iluminação de Segurança e Design' },
@@ -202,6 +202,17 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
                 </div>
               </button>
             ))}
+            
+            {/* Botão Customizar - NOVO */}
+            <div className="w-[1px] h-4 bg-white/10 mx-1 self-center" />
+            <button
+              onClick={() => !isStatic && startEditing(image)}
+              disabled={isStatic}
+              className="px-3 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center gap-2 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all text-[9px] font-black uppercase tracking-widest"
+            >
+              <Pencil size={12} className="text-neon-verde" />
+              Personalizar
+            </button>
           </div>
           
           <div className="flex items-center gap-3">
