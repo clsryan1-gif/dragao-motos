@@ -1,18 +1,27 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { ChevronLeft, Zap, ShoppingBag, CreditCard, Banknote, ShieldCheck, QrCode } from 'lucide-react';
+import { ChevronLeft, Zap, ShoppingBag, CreditCard, Banknote, ShieldCheck, QrCode, Minus, Plus, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { formatCurrency } from '@/lib/utils';
 import { useCart, Produto } from '@/context/CartContext';
 
 export default function CheckoutPage() {
-  const { cart: cartItems, total, clearCart } = useCart();
+  const { cart: cartItems, total, clearCart, updateQuantity, removeFromCart } = useCart();
   const [paymentMethod, setPaymentMethod] = useState<'PIX' | 'CARD' | 'CASH' | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  // Redireciona se o radar estiver vazio
+  useEffect(() => {
+    if (cartItems.length === 0 && !loading) {
+      router.push('/produtos');
+    }
+  }, [cartItems, router, loading]);
   
   const handleFinish = () => {
     if (!paymentMethod) return;
@@ -59,12 +68,40 @@ export default function CheckoutPage() {
               
               <div className="space-y-6">
                 {cartItems.map((item: Produto) => (
-                  <div key={item.id} className="flex justify-between items-center group">
-                    <div className="flex flex-col">
-                      <span className="text-sm font-display font-black uppercase italic text-white group-hover:text-neon-verde transition-colors">{item.nome}</span>
-                      <span className="text-[10px] text-white/30 font-black uppercase tracking-widest">QTD: {item.qtd}</span>
+                  <div key={item.id} className="flex justify-between items-center group bg-white/[0.02] p-4 rounded-2xl border border-white/5 hover:border-neon-verde/30 transition-all">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-sm font-display font-black uppercase italic text-white group-hover:text-neon-verde transition-colors line-clamp-1">{item.nome}</span>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center bg-black/40 rounded-lg border border-white/10 p-1">
+                          <button 
+                            onClick={() => updateQuantity(item.id, item.qtd - 1)}
+                            className="w-6 h-6 flex items-center justify-center text-white/40 hover:text-neon-verde hover:bg-white/5 rounded transition-all"
+                          >
+                            <Minus size={12} />
+                          </button>
+                          <span className="w-8 text-center text-[10px] font-black text-neon-verde">{item.qtd}</span>
+                          <button 
+                            onClick={() => updateQuantity(item.id, item.qtd + 1)}
+                            className="w-6 h-6 flex items-center justify-center text-white/40 hover:text-neon-verde hover:bg-white/5 rounded transition-all"
+                          >
+                            <Plus size={12} />
+                          </button>
+                        </div>
+                        <button 
+                          onClick={() => removeFromCart(item.id)}
+                          className="text-white/10 hover:text-red-500 transition-colors p-1"
+                          title="Remover item"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
                     </div>
-                    <span className="text-lg font-display font-black italic">{formatCurrency(item.preco)}</span>
+                    <div className="text-right">
+                      <span className="text-lg font-display font-black italic block leading-none">{formatCurrency(item.preco * item.qtd)}</span>
+                      {item.qtd > 1 && (
+                        <span className="text-[9px] text-white/20 font-black uppercase tracking-widest">{formatCurrency(item.preco)} un.</span>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
