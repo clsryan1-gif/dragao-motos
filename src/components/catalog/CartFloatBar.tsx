@@ -4,11 +4,16 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Zap, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { formatCurrency } from '@/lib/utils';
 
 export function CartFloatBar() {
-  const { cart, total, count } = useCart();
+  const { total, count } = useCart();
+  const pathname = usePathname();
+
+  // Não mostrar na página de checkout
+  if (pathname === '/checkout') return null;
 
   return (
     <AnimatePresence>

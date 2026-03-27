@@ -43,6 +43,7 @@ export const metadata: Metadata = {
 };
 
 import { BottomNav } from "@/components/layout/BottomNav";
+import { CartFloatBar } from "@/components/catalog/CartFloatBar";
 import { ToastProvider } from "@/context/ToastContext";
 import { CartProvider } from "@/context/CartContext";
 import UnregisterSW from "@/components/pwa/UnregisterSW";
@@ -92,6 +93,7 @@ export default function RootLayout({
               {children}
             </main>
             <BottomNav />
+            <CartFloatBar />
           </CartProvider>
         </ToastProvider>
       </body>
