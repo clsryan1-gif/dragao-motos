@@ -137,41 +137,25 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
     }
   ];
 
-  const beautify = (title: string, aspect: string, index: number) => {
-    // Se não for o placeholder padrão, mantém o que está no banco
-    if (title !== 'Nova Imagem' && title !== 'Mídia Customizada Dragão' && title !== 'Mídia Dragão Motos') return { title, aspect };
-
-    // Mapeamento tático baseado no aspecto da foto (analisado via visão computacional do screenshot)
-    const tacticalMap = [
-      { t: 'Lanterna High-Intensity', a: 'Estética: Iluminação de Segurança e Design' }, // Top-Left (Tail light)
-      { t: 'Suspensão Invertida Pro', a: 'Performance: Estabilidade em Terrenos Irregulares' }, // Top-Right (Fork)
-      { t: 'Chassi Flex One', a: 'Engenharia: Estrutura Reforçada e Leveza' }, // Bottom-Left (Engine/Frame)
-      { t: 'Comandos Progressivos', a: 'Ergonomia: Controle Total na Ponta dos Dedos' }, // Bottom-Right (Handlebar)
-      { t: 'Estética Cyber-Mecânica', a: 'Branding: Identidade Visual Dragão Motos' }
-    ];
-
-    return { 
-      title: tacticalMap[index]?.t || 'Mídia Dragão Motos', 
-      aspect: (aspect === 'Aspecto Industrial' || aspect === 'Calibragem Técnica Superior' || aspect === 'Performance de Elite') 
-        ? tacticalMap[index]?.a || 'Performance de Elite' 
-        : aspect 
-    };
-  };
-
-  const dbMapped: any[] = dbImages && dbImages.length > 0 ? dbImages.map((img, idx) => {
-    const { title, aspect } = beautify(img.title || 'Nova Imagem', img.description || 'Aspecto Industrial', idx);
+  const dbMapped: any[] = dbImages && dbImages.length > 0 ? dbImages.map((img) => {
     return {
       id: img.id,
       src: img.url,
-      title,
-      aspect
+      title: img.title || 'Mídia Dragão Motos',
+      aspect: img.description || 'Performance de Elite'
     };
   }) : [];
 
   // Cria a lista final garantindo 5 posições (prioridade para o que vem do banco)
   const images = [...dbMapped];
   for (let i = images.length; i < 5; i++) {
-    images.push(defaultImages[i]);
+    const fallback = defaultImages[i];
+    images.push({
+      ...fallback,
+      // Se for fallback, usa os textos do defaultMap correspondente
+      title: fallback.title,
+      aspect: fallback.aspect
+    });
   }
 
   const AdminCardOverlay = ({ image }: { image: any }) => {

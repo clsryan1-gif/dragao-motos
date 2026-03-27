@@ -9,6 +9,15 @@ import { supabase, supabaseUrl, supabaseKey } from '@/lib/supabase';
 import { motion, Reorder } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DiagnosticOverlay } from '@/components/ui/DiagnosticOverlay';
+import { updateGalleryImage } from '@/app/admin/actions';
+
+const PHRASE_SETS = [
+  { t: 'Lanterna High-Intensity', a: 'Estética: Iluminação de Segurança e Design' },
+  { t: 'Suspensão Invertida Pro', a: 'Performance: Estabilidade em Terrenos Irregulares' },
+  { t: 'Chassi Flex One', a: 'Engenharia: Estrutura Reforçada e Leveza' },
+  { t: 'Comandos Progressivos', a: 'Ergonomia: Controle Total na Ponta dos Dedos' },
+  { t: 'Estética Cyber-Mecânica', a: 'Branding: Identidade Visual Dragão Motos' }
+];
 
 export default function GalleryManager({ initialImages }: { initialImages: any[] }) {
   const { showToast } = useToast();
@@ -60,6 +69,19 @@ export default function GalleryManager({ initialImages }: { initialImages: any[]
     }
   };
 
+
+  const handleUpdatePhrase = async (id: string, phrase: { t: string, a: string }) => {
+    setLoading(true);
+    try {
+      await updateGalleryImage(id, { title: phrase.t, description: phrase.a });
+      setImages(images.map(img => img.id === id ? { ...img, title: phrase.t, description: phrase.a } : img));
+      showToast('ESTILO APLICADO', 'success');
+    } catch (err) {
+      showToast('ERRO AO APLICAR ESTILO', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleReorder = async () => {
     setLoading(true);
@@ -178,9 +200,35 @@ export default function GalleryManager({ initialImages }: { initialImages: any[]
                      <div className={cn("w-2 h-2 rounded-full", index === 2 ? "bg-neon-verde animate-pulse" : "bg-white/20")} />
                      {index === 2 ? 'Foco Principal (Hero)' : index < 2 ? 'Lado Superior' : 'Grade Base'}
                    </p>
-                   <h4 className="text-sm font-display font-black uppercase italic tracking-[0.1em] truncate text-white/90">
-                     {img.title || 'Mídia Operacional'}
-                   </h4>
+                   
+                   <div className="flex flex-col gap-1">
+                      <h4 className="text-sm font-display font-black uppercase italic tracking-[0.1em] truncate text-white/90">
+                        {img.title || 'Mídia Operacional'}
+                      </h4>
+                      <p className="text-[8px] text-white/40 uppercase font-black truncate">{img.description || 'Performance de Elite'}</p>
+                   </div>
+
+                   {/* Quick Phrase Picker */}
+                   <div className="mt-4 flex flex-wrap gap-1.5 pt-4 border-t border-white/5">
+                      {PHRASE_SETS.map((phrase, pIdx) => (
+                        <button
+                          key={pIdx}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleUpdatePhrase(img.id, phrase);
+                          }}
+                          className={cn(
+                             "w-7 h-7 rounded-lg bg-black/40 border flex items-center justify-center text-[10px] font-black italic transition-all relative group/p",
+                             img.title === phrase.t ? "border-neon-verde text-neon-verde shadow-neon-small" : "border-white/10 text-white/20 hover:text-white"
+                          )}
+                        >
+                          {pIdx + 1}
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-28 p-2 bg-black text-[7px] rounded-lg opacity-0 group-hover/p:opacity-100 pointer-events-none transition-opacity border border-white/10 text-center z-50">
+                            {phrase.t}
+                          </div>
+                        </button>
+                      ))}
+                   </div>
                 </div>
 
                 {/* Scanline & Grain Effects */}
