@@ -75,9 +75,22 @@ export default function GalleryManager({ initialImages }: { initialImages: any[]
     try {
       await updateGalleryImage(id, { title: phrase.t, description: phrase.a });
       setImages(images.map(img => img.id === id ? { ...img, title: phrase.t, description: phrase.a } : img));
-      showToast('ESTILO APLICADO', 'success');
+      showToast('FRASE ATUALIZADA NO SLOT', 'success');
     } catch (err) {
-      showToast('ERRO AO APLICAR ESTILO', 'error');
+      showToast('ERRO AO ATUALIZAR FRASE', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateCustom = async (id: string, title: string, description: string) => {
+    setLoading(true);
+    try {
+      await updateGalleryImage(id, { title, description });
+      setImages(images.map(img => img.id === id ? { ...img, title, description } : img));
+      showToast('PERSONALIZAÇÃO SALVA', 'success');
+    } catch (err) {
+      showToast('ERRO AO SALVAR', 'error');
     } finally {
       setLoading(false);
     }
@@ -153,12 +166,83 @@ export default function GalleryManager({ initialImages }: { initialImages: any[]
           </div>
         </div>
 
-        {/* Grid de Disposição Hierárquica */}
+        {/* SECTION: SHOWCASE CONTROL PANEL - NOVO MÉTODO FUNCIONAL */}
+        <div className="bg-aco-grad border-chrome p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+           <div className="mb-8 border-b border-white/5 pb-4">
+              <h2 className="text-3xl font-display font-black uppercase italic tracking-tighter text-neon-verde">Controle de Showcase</h2>
+              <p className="text-[10px] text-white/30 font-black uppercase tracking-[0.5em] mt-2">Mapeamento Direto por Slot (1 a 5)</p>
+           </div>
+           
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              {Array.from({ length: 5 }).map((_, i) => {
+                const img = images[i];
+                return (
+                  <div key={i} className={cn(
+                    "bg-black/40 border p-4 rounded-3xl flex flex-col gap-4 group/slot transition-all",
+                    img ? "border-white/10" : "border-white/5 opacity-50 border-dashed"
+                  )}>
+                    <div className="flex justify-between items-center px-1">
+                      <span className="text-[10px] font-black text-neon-verde italic">SLOT {i + 1}</span>
+                      <div className={cn("w-1.5 h-1.5 rounded-full", img ? "bg-neon-verde shadow-neon-small" : "bg-white/10")} />
+                    </div>
+                    
+                    <div className="relative aspect-video rounded-xl overflow-hidden bg-black/60 border border-white/5">
+                       {img ? (
+                         <Image src={img.url} alt="" fill className="object-cover brightness-50" />
+                       ) : (
+                         <div className="flex items-center justify-center h-full">
+                           <ImageIcon size={16} className="text-white/10" />
+                         </div>
+                       )}
+                    </div>
+
+                    <div className="space-y-2">
+                       <input 
+                         type="text" 
+                         value={img?.title || ''}
+                         onChange={(e) => img && setImages(images.map(item => item.id === img.id ? { ...item, title: e.target.value } : item))}
+                         onBlur={(e) => img && handleUpdateCustom(img.id, e.target.value, img.description || '')}
+                         disabled={!img}
+                         placeholder="Título do Slot"
+                         className="w-full bg-black/60 border border-white/5 p-2 rounded-lg text-[10px] font-black uppercase tracking-tight text-white placeholder:text-white/10 outline-none focus:border-neon-verde/30 transition-all"
+                       />
+                       <input 
+                         type="text" 
+                         value={img?.description || ''}
+                         onChange={(e) => img && setImages(images.map(item => item.id === img.id ? { ...item, description: e.target.value } : item))}
+                         onBlur={(e) => img && handleUpdateCustom(img.id, img.title || '', e.target.value)}
+                         disabled={!img}
+                         placeholder="Subtítulo / Tag"
+                         className="w-full bg-black/60 border border-white/5 p-2 rounded-lg text-[8px] font-bold uppercase tracking-widest text-white/40 placeholder:text-white/10 outline-none focus:border-neon-verde/30 transition-all"
+                       />
+                    </div>
+
+                    {/* Quick Select Buttons */}
+                    <div className="flex flex-wrap gap-1 justify-center pt-2 border-t border-white/5">
+                       {PHRASE_SETS.slice(0, 5).map((p, idx) => (
+                         <button
+                           key={idx}
+                           title={p.t}
+                           onClick={() => img && handleUpdatePhrase(img.id, p)}
+                           disabled={!img}
+                           className="w-6 h-6 rounded-md bg-white/5 border border-white/5 flex items-center justify-center text-[8px] font-black text-white/20 hover:text-neon-verde hover:border-neon-verde/30 hover:bg-neon-verde/5 transition-all"
+                         >
+                           {idx + 1}
+                         </button>
+                       ))}
+                    </div>
+                  </div>
+                );
+              })}
+           </div>
+        </div>
+
+        {/* Grid de Disposição Hierárquica - MÉTODO SIMPLIFICADO */}
         <div className="space-y-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6 px-4">
              <div className="text-center md:text-left">
-                <h2 className="text-3xl font-display font-black uppercase italic tracking-tighter text-white mb-1">Mapa de Disposição</h2>
-                <p className="text-[10px] text-white/30 font-black uppercase tracking-[0.5em]">Arraste para calibrar a hierarquia do Showcase</p>
+                <h2 className="text-3xl font-display font-black uppercase italic tracking-tighter text-white mb-1">Grade de Imagens</h2>
+                <p className="text-[10px] text-white/30 font-black uppercase tracking-[0.5em]">Arraste para definir quais fotos ocupam os 5 slots acima</p>
              </div>
              
              <button 
@@ -167,7 +251,7 @@ export default function GalleryManager({ initialImages }: { initialImages: any[]
                className="bg-white/5 border border-white/10 hover:border-neon-verde/40 hover:bg-neon-verde/5 px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 transition-all group/save shadow-2xl backdrop-blur-md"
              >
                {loading ? <Zap size={18} className="animate-pulse text-neon-verde" /> : <Save size={18} className="group-hover:rotate-12 transition-transform" />}
-               SINCRONIZAR ORDEM OPERACIONAL
+               SALVAR ORDEM OPERACIONAL
              </button>
           </div>
 
@@ -175,65 +259,33 @@ export default function GalleryManager({ initialImages }: { initialImages: any[]
             axis="y" 
             values={images} 
             onReorder={setImages} 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-2"
+            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 p-2"
           >
             {images.map((img, index) => (
               <Reorder.Item 
                 key={img.id} 
                 value={img}
                 className={cn(
-                  "bg-aco-grad border-chrome rounded-[2.5rem] overflow-hidden cursor-grab active:cursor-grabbing group relative aspect-video shadow-2xl transition-all duration-300",
-                  index === 2 ? "ring-2 ring-neon-verde/50 shadow-neon-small" : "border-white/5 hover:border-white/20"
+                  "bg-aco-grad border rounded-3xl overflow-hidden cursor-grab active:cursor-grabbing group relative aspect-square shadow-xl transition-all duration-300",
+                  index < 5 ? "border-neon-verde/30 shadow-neon-small ring-1 ring-neon-verde/10" : "border-white/5 hover:border-white/10"
                 )}
               >
-                <Image src={img.url} alt="" fill className="object-cover brightness-[0.4] group-hover:brightness-75 transition-all duration-700 saturate-[0.8]" />
+                <Image src={img.url} alt="" fill className="object-cover brightness-50 group-hover:brightness-75 transition-all duration-500" />
                 
-                {/* Badge de Posição Mecânica */}
-                <div className="absolute top-6 left-6 w-12 h-12 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/10 flex flex-col items-center justify-center shadow-2xl">
-                   <span className="text-[10px] font-black uppercase text-white/40 tracking-tighter leading-none mb-1">SLOT</span>
-                   <span className="text-lg font-display font-black italic leading-none text-neon-verde">{index + 1}</span>
+                {/* Badge Simples */}
+                <div className="absolute top-3 left-3 w-8 h-8 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center shadow-2xl">
+                   <span className="text-xs font-display font-black italic text-neon-verde">{index + 1}</span>
                 </div>
 
-                {/* Status Info Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent flex flex-col justify-end p-8">
-                   <p className="text-[10px] font-black uppercase tracking-[0.3em] text-neon-verde mb-2 glow-neon flex items-center gap-2">
-                     <div className={cn("w-2 h-2 rounded-full", index === 2 ? "bg-neon-verde animate-pulse" : "bg-white/20")} />
-                     {index === 2 ? 'Foco Principal (Hero)' : index < 2 ? 'Lado Superior' : 'Grade Base'}
-                   </p>
-                   
-                   <div className="flex flex-col gap-1">
-                      <h4 className="text-sm font-display font-black uppercase italic tracking-[0.1em] truncate text-white/90">
-                        {img.title || 'Mídia Operacional'}
-                      </h4>
-                      <p className="text-[8px] text-white/40 uppercase font-black truncate">{img.description || 'Performance de Elite'}</p>
-                   </div>
+                {index < 5 && (
+                  <div className="absolute top-3 right-3">
+                     <div className="bg-neon-verde text-black text-[7px] font-black px-2 py-1 rounded-full uppercase tracking-tighter shadow-neon animate-pulse">
+                        SLOT ATIVO
+                     </div>
+                  </div>
+                )}
 
-                   {/* Quick Phrase Picker */}
-                   <div className="mt-4 flex flex-wrap gap-1.5 pt-4 border-t border-white/5">
-                      {PHRASE_SETS.map((phrase, pIdx) => (
-                        <button
-                          key={pIdx}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleUpdatePhrase(img.id, phrase);
-                          }}
-                          className={cn(
-                             "w-7 h-7 rounded-lg bg-black/40 border flex items-center justify-center text-[10px] font-black italic transition-all relative group/p",
-                             img.title === phrase.t ? "border-neon-verde text-neon-verde shadow-neon-small" : "border-white/10 text-white/20 hover:text-white"
-                          )}
-                        >
-                          {pIdx + 1}
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-28 p-2 bg-black text-[7px] rounded-lg opacity-0 group-hover/p:opacity-100 pointer-events-none transition-opacity border border-white/10 text-center z-50">
-                            {phrase.t}
-                          </div>
-                        </button>
-                      ))}
-                   </div>
-                </div>
-
-                {/* Scanline & Grain Effects */}
-                <div className="absolute inset-0 pointer-events-none bg-scanline opacity-[0.03]" />
-                <div className="absolute inset-0 pointer-events-none border border-white/5 rounded-[2.5rem]" />
+                <div className="absolute inset-0 pointer-events-none border border-white/5 rounded-3xl" />
               </Reorder.Item>
             ))}
           </Reorder.Group>
