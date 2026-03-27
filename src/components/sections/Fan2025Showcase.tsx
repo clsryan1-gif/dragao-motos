@@ -10,7 +10,15 @@ import { supabase, supabaseUrl, supabaseKey } from '@/lib/supabase';
 import { deleteGalleryImage, updateGalleryImage } from '@/app/admin/actions';
 import { DiagnosticOverlay } from '@/components/ui/DiagnosticOverlay';
 import { cn } from '@/lib/utils';
-import { Edit3, Check, Save } from 'lucide-react';
+import { Edit3, Check, Save, Type } from 'lucide-react';
+
+const PHRASE_SETS = [
+  { t: 'Lanterna High-Intensity', a: 'Estética: Iluminação de Segurança e Design' },
+  { t: 'Suspensão Invertida Pro', a: 'Performance: Estabilidade em Terrenos Irregulares' },
+  { t: 'Chassi Flex One', a: 'Engenharia: Estrutura Reforçada e Leveza' },
+  { t: 'Comandos Progressivos', a: 'Ergonomia: Controle Total na Ponta dos Dedos' },
+  { t: 'Estética Cyber-Mecânica', a: 'Branding: Identidade Visual Dragão Motos' }
+];
 
 export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdmin?: boolean }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -20,14 +28,15 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
   const [editingInfoId, setEditingInfoId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({ title: '', description: '' });
 
-  const handleUpdateInfo = async (id: string) => {
+  const handleUpdateInfo = async (id: string, customData?: { title: string, description: string }) => {
     setUpdatingId(id);
     try {
-      await updateGalleryImage(id, { 
+      const dataToUpdate = customData || { 
         title: editForm.title, 
         description: editForm.description 
-      });
-      showToast('METADADOS ATUALIZADOS', 'success');
+      };
+      await updateGalleryImage(id, dataToUpdate);
+      showToast('ESTILO TÁTICO APLICADO', 'success');
       setEditingInfoId(null);
       window.location.reload();
     } catch (err: any) {
@@ -177,6 +186,23 @@ export function Fan2025Showcase({ dbImages, isAdmin }: { dbImages?: any[], isAdm
       <>
         <div className="absolute inset-0 z-30 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-6">
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-2">Painel de Ajuste</p>
+
+          {/* Seleção de Frases Táticas - NOVO */}
+          <div className="flex flex-wrap justify-center gap-1.5 mb-4 bg-black/40 p-2 rounded-xl border border-white/5">
+            {PHRASE_SETS.map((phrase, idx) => (
+              <button
+                key={idx}
+                onClick={() => !isStatic && handleUpdateInfo(id, { title: phrase.t, description: phrase.a })}
+                disabled={isStatic || isUpdating}
+                className="w-8 h-8 rounded-lg bg-aco-grad border border-white/10 flex items-center justify-center text-white/40 hover:text-neon-verde hover:border-neon-verde/50 transition-all text-sm font-black italic relative group/phrase"
+              >
+                {idx + 1}
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-32 p-2 bg-black text-[8px] rounded-lg opacity-0 group-hover/phrase:opacity-100 pointer-events-none transition-opacity border border-white/10 text-center">
+                   {phrase.t}
+                </div>
+              </button>
+            ))}
+          </div>
           
           <div className="flex items-center gap-3">
             {/* Botão de Substituir Foto */}
